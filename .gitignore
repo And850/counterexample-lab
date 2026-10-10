@@ -1,0 +1,15 @@
+.env
+.env.*
+!.env.example
+.venv/
+.runs/
+.superpowers/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+uploads/
+samples/raw/
+.DS_Store
