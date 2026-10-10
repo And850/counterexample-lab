@@ -1,0 +1,36 @@
+{
+  "outcome": "corroborated_counterexample",
+  "message": "Both sample-checked references and validators agree on this executed failing input. Reduced locally; global minimality is not claimed.",
+  "evidence": {
+    "stdin": "2 2\n1 1\n2 2",
+    "expected": "2",
+    "actual": {
+      "status": "ok",
+      "stdout": "1",
+      "stderr": "",
+      "exit_code": 0,
+      "elapsed": 0.0037975830000505084
+    },
+    "confirmation": "2",
+    "references_agree": true,
+    "validators_agree": true,
+    "samples_checked": true,
+    "primary_code": "import random\ndef parse(stdin):\n    t = list(map(int, stdin.split()))\n    assert len(t) >= 2 and len(t) == 2 + 2 * t[0]\n    return {'W': t[1], 'items': [[t[2 + 2 * i], t[3 + 2 * i]] for i in range(t[0])]}\ndef render(case):\n    lines = [f\"{len(case['items'])} {case['W']}\"]\n    lines.extend(f\"{w} {v}\" for w, v in case['items'])\n    return chr(10).join(lines)\ndef valid(case):\n    if not isinstance(case, dict) or 'W' not in case or 'items' not in case:\n        return False\n    W, it = case['W'], case['items']\n    return (isinstance(W, int) and 1 <= W <= 20 and isinstance(it, list) and 1 <= len(it) <= 8 and\n            all(isinstance(x, list) and len(x) == 2 and isinstance(x[0], int) and 1 <= x[0] <= 10 and\n                isinstance(x[1], int) and 1 <= x[1] <= 20 for x in it))\ndef solve(stdin):\n    c = parse(stdin)\n    W, it = c['W'], c['items']\n    best = 0\n    for m in range(1 << len(it)):\n        sw = sum(it[i][0] for i in range(len(it)) if (m >> i) & 1)\n        if sw <= W:\n            sv = sum(it[i][1] for i in range(len(it)) if (m >> i) & 1)\n            if sv > best: best = sv\n    return str(best)\ndef generate(seed, index, mode):\n    if mode == 'exhaustive':\n        if index >= 32: return None\n        n = 1 + (index & 1)\n        w = 1 + ((index >> 1) % 4)\n        it = [[1 + (i % 2), 1 + ((index >> (3 + i)) % 2)] for i in range(n)]\n        return {'W': w, 'items': it}\n    if mode == 'random':\n        rng = random.Random(seed + index)\n        n, W = rng.randint(1, 8), rng.randint(1, 20)\n        return {'W': W, 'items': [[rng.randint(1, 10), rng.randint(1, 20)] for _ in range(n)]}\n    adv = [{'W': 1, 'items': [[10, 20]]}, {'W': 20, 'items': [[1, 20]] * 8}, {'W': 5, 'items': [[6, 10]]}]\n    return adv[index % len(adv)]\ndef shrink(case):\n    out, it, W = [], case['items'], case['W']\n    if len(it) > 1:\n        out.append({'W': W, 'items': it[:-1]})\n        out.append({'W': W, 'items': it[1:]})\n    if W > 1:\n        out.append({'W': max(1, W // 2), 'items': it})\n    for i in range(min(2, len(it))):\n        w, v = it[i]\n        if w > 1 or v > 1:\n            mod = [row[:] for row in it]\n            mod[i] = [max(1, w // 2), max(1, v // 2)]\n            out.append({'W': W, 'items': mod})\n    return [c for c in out if valid(c)][:16]",
+    "confirmation_code": "def valid_input(stdin):\n    t = stdin.split()\n    if len(t) < 2:\n        return False\n    try:\n        n, W = int(t[0]), int(t[1])\n    except ValueError:\n        return False\n    if not (1 <= n <= 8 and 1 <= W <= 20):\n        return False\n    if len(t) != 2 + 2 * n:\n        return False\n    for i in range(n):\n        try:\n            w, v = int(t[2 + 2 * i]), int(t[3 + 2 * i])\n        except ValueError:\n            return False\n        if not (1 <= w <= 10 and 1 <= v <= 20):\n            return False\n    return True\n\ndef solve(stdin):\n    t = list(map(int, stdin.split()))\n    n, W = t[0], t[1]\n    items = [(t[2 + 2 * i], t[3 + 2 * i]) for i in range(n)]\n    best = 0\n    for mask in range(1 << n):\n        tot_w = sum(items[i][0] for i in range(n) if (mask >> i) & 1)\n        tot_v = sum(items[i][1] for i in range(n) if (mask >> i) & 1)\n        if tot_w <= W and tot_v > best:\n            best = tot_v\n    return str(best)",
+    "candidate_hash": "17e10c6f76696be2dbee0e848418040819f754af4d0cd71b24543c6130ae566d",
+    "primary_hash": "e9c1d1f02e95f6143ea2ed58248b683930c6f063840478a18ed4c94e71b1a589",
+    "confirmation_hash": "7dd2071d235d1e07cc6fad22a3d220236189254e79e27a18c360533a0b7dfcee"
+  },
+  "seed": 850,
+  "counts": {
+    "generated": 20,
+    "valid": 19,
+    "tested": 19,
+    "invalid": 0,
+    "timed_out": 0
+  },
+  "elapsed": 59.40835541696288,
+  "method": "Brute-force 0-1 knapsack subset enumeration",
+  "explanation": "The program uses a greedy approach, sorting items by value-to-weight ratio and picking items sequentially. For the given input, both items have an equal ratio (1/1 and 2/2). The code considers item (1, 1) first, taking 1 weight and yielding value 1, which leaves remaining capacity 1 and prevents item (2, 2) from fitting. Consequently, it outputs 1 instead of the optimal knapsack value 2 obtained by selecting item (2, 2).",
+  "explanation_ai_generated": true
+}

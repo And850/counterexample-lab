@@ -1,0 +1,17 @@
+{
+  "outcome": "inconclusive",
+  "message": "No disagreement found within the tested cases and limits.",
+  "evidence": null,
+  "seed": 850,
+  "counts": {
+    "generated": 119,
+    "valid": 88,
+    "tested": 88,
+    "invalid": 0,
+    "timed_out": 1
+  },
+  "elapsed": 120.3267672091024,
+  "method": "Brute-force all nonempty contiguous subarrays and find the maximum sum.",
+  "explanation": "",
+  "explanation_ai_generated": false
+}

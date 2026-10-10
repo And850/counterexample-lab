@@ -1,0 +1,36 @@
+{
+  "outcome": "corroborated_counterexample",
+  "message": "Both sample-checked references and validators agree on this executed failing input. Reduced locally; global minimality is not claimed.",
+  "evidence": {
+    "stdin": "0 -1",
+    "expected": "-1",
+    "actual": {
+      "status": "ok",
+      "stdout": "1",
+      "stderr": "",
+      "exit_code": 0,
+      "elapsed": 0.005545583999946757
+    },
+    "confirmation": "-1",
+    "references_agree": true,
+    "validators_agree": true,
+    "samples_checked": true,
+    "primary_code": "def parse(stdin):\n    parts = stdin.split()\n    assert len(parts) == 2\n    return [int(parts[0]), int(parts[1])]\n\ndef render(case):\n    return f\"{case[0]} {case[1]}\"\n\ndef valid(case):\n    return isinstance(case, list) and len(case) == 2 and all(isinstance(x, int) and -100 <= x <= 100 for x in case)\n\ndef solve(stdin):\n    a, b = parse(stdin)\n    return str(a + b)\n\ndef generate(seed, index, mode):\n    if mode == \"exhaustive\":\n        vals = list(range(-5, 6))\n        if index >= len(vals) * len(vals):\n            return None\n        return [vals[index // len(vals)], vals[index % len(vals)]]\n    import random\n    rng = random.Random(seed + index)\n    if mode == \"adversarial\":\n        bounds = [-100, -1, 0, 1, 100]\n        return [rng.choice(bounds), rng.choice(bounds)]\n    return [rng.randint(-100, 100), rng.randint(-100, 100)]\n\ndef shrink(case):\n    a, b = case\n    res = []\n    for na, nb in [(0, b), (a, 0), (int(a / 2), b), (a, int(b / 2)), (int(a / 2), int(b / 2))]:\n        if [na, nb] != case and valid([na, nb]) and [na, nb] not in res:\n            res.append([na, nb])\n    return res[:16]",
+    "confirmation_code": "def valid_input(stdin):\n    tokens = stdin.split()\n    if len(tokens) != 2:\n        return False\n    try:\n        a, b = int(tokens[0]), int(tokens[1])\n    except ValueError:\n        return False\n    return -100 <= a <= 100 and -100 <= b <= 100\n\ndef solve(stdin):\n    a, b = map(int, stdin.split())\n    return str(a + b)",
+    "candidate_hash": "d9942c5ba5e10d110842c425c0223ffb914a104cc4ee979f83108b8fe0817f88",
+    "primary_hash": "de3c060eab71cadba24c3b9a36bf8906516bf21448c69adbff2288cc27da3fe0",
+    "confirmation_hash": "08c48f84f5dc7c25c59e7286443169f2e9b3e31b2642d93e21c8e189ec10f0d8"
+  },
+  "seed": 850,
+  "counts": {
+    "generated": 1,
+    "valid": 2,
+    "tested": 2,
+    "invalid": 0,
+    "timed_out": 0
+  },
+  "elapsed": 28.704070916981436,
+  "method": "Directly computes and outputs the integer sum of two numbers.",
+  "explanation": "The program reads two integers and prints std::abs(a + b) instead of just the sum a + b. For the input '0 -1', the sum is -1, but taking the absolute value results in 1, which causes a mismatch with the expected output '-1'.",
+  "explanation_ai_generated": true
+}

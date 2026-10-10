@@ -1,0 +1,36 @@
+{
+  "outcome": "unconfirmed_disagreement",
+  "message": "Observed disagreement; independent reference preparation or execution failed.",
+  "evidence": {
+    "stdin": "8\n3 0 4 5 3 0 2 0",
+    "expected": "5",
+    "actual": {
+      "status": "ok",
+      "stdout": "8",
+      "stderr": "",
+      "exit_code": 0,
+      "elapsed": 0.0023729999998067797
+    },
+    "confirmation": null,
+    "references_agree": false,
+    "validators_agree": false,
+    "samples_checked": true,
+    "primary_code": "def parse(stdin):\n    t = stdin.split()\n    n = int(t[0])\n    assert len(t) == n + 1\n    return [int(x) for x in t[1:]]\n\ndef render(case):\n    return str(len(case)) + chr(10) + \" \".join(map(str, case))\n\ndef valid(case):\n    return isinstance(case, list) and 1 <= len(case) <= 8 and all(type(x) is int and 0 <= x <= 5 for x in case)\n\ndef solve(stdin):\n    c = parse(stdin)\n    return str(len(set(c)))\n\ndef generate(seed, index, mode):\n    if mode == \"exhaustive\":\n        if index >= 63:\n            return None\n        n = (index % 3) + 1\n        v = index // 3\n        return [(v + i) % 6 for i in range(n)]\n    import random\n    rng = random.Random(seed + index)\n    if mode == \"random\":\n        n = rng.randint(1, 8)\n        return [rng.randint(0, 5) for _ in range(n)]\n    adv = [[0], [5], [0] * 8, [5] * 8, list(range(6)), [0, 5] * 4, [i % 2 for i in range(8)]]\n    return adv[index % len(adv)][:]\n\ndef shrink(case):\n    res = []\n    if len(case) > 1:\n        res.append(case[:-1])\n        res.append(case[1:])\n    for i, x in enumerate(case):\n        if x > 0:\n            c1, c2 = list(case), list(case)\n            c1[i] = 0\n            c2[i] = x // 2\n            for c in (c1, c2):\n                if c not in res and c != case:\n                    res.append(c)\n    return [c for c in res if valid(c)][:16]",
+    "confirmation_code": "",
+    "candidate_hash": "af6d3cf6110139c4e86ec21ccae96e283bcd39c7f22a2cf0b1ec57ab691b7935",
+    "primary_hash": "284794a5e10cc719a842f0fe7241ee7ba2b6216e5a73a484892b480b22a56f0b",
+    "confirmation_hash": ""
+  },
+  "seed": 850,
+  "counts": {
+    "generated": 27,
+    "valid": 20,
+    "tested": 20,
+    "invalid": 0,
+    "timed_out": 0
+  },
+  "elapsed": 74.74394845799543,
+  "method": "Count unique elements via set size.",
+  "explanation": "",
+  "explanation_ai_generated": false
+}

@@ -107,7 +107,7 @@ class Provider:
 
     async def _gemini(self, prompt, schema, timeout):
         from google import genai
-        from google.genai import types
+        from google.genai import types, errors
 
         client = genai.Client(api_key=os.environ['GEMINI_API_KEY'], http_options=types.HttpOptions(timeout=int(timeout * 1000), retry_options=types.HttpRetryOptions(attempts=1)))
         try:
@@ -115,6 +115,8 @@ class Provider:
             if not result.candidates or result.candidates[0].finish_reason != types.FinishReason.STOP:
                 raise ProviderError('Model response was truncated or did not finish')
             return result.text or ''
+        except errors.APIError as error:
+            raise ProviderError('Model quota/rate limit reached' if error.code == 429 else 'Model service rejected the request') from error
         finally:
             await client.aio.aclose()
 

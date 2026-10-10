@@ -1,0 +1,36 @@
+{
+  "outcome": "corroborated_counterexample",
+  "message": "Both sample-checked references and validators agree on this executed failing input. Reduced locally; global minimality is not claimed.",
+  "evidence": {
+    "stdin": "0 -1",
+    "expected": "-1",
+    "actual": {
+      "status": "ok",
+      "stdout": "1",
+      "stderr": "",
+      "exit_code": 0,
+      "elapsed": 0.00466070800007401
+    },
+    "confirmation": "-1",
+    "references_agree": true,
+    "validators_agree": true,
+    "samples_checked": true,
+    "primary_code": "import random\n\ndef parse(stdin):\n    parts = stdin.split()\n    if len(parts) != 2:\n        raise ValueError('Expected 2 tokens')\n    return [int(parts[0]), int(parts[1])]\n\ndef render(case):\n    return f\"{case[0]} {case[1]}\"\n\ndef valid(case):\n    return isinstance(case, list) and len(case) == 2 and all(isinstance(x, int) and -100 <= x <= 100 for x in case)\n\ndef solve(stdin):\n    a, b = parse(stdin)\n    return str(a + b)\n\ndef generate(seed, index, mode):\n    if mode == 'exhaustive':\n        vals = list(range(-5, 6))\n        if index >= len(vals) * len(vals):\n            return None\n        return [vals[index // len(vals)], vals[index % len(vals)]]\n    if mode == 'random':\n        rng = random.Random(seed + index)\n        return [rng.randint(-100, 100), rng.randint(-100, 100)]\n    if mode == 'adversarial':\n        b = [-100, -1, 0, 1, 100]\n        pairs = [[x, y] for x in b for y in b]\n        return pairs[index % len(pairs)]\n    return None\n\ndef shrink(case):\n    a, b = case\n    cands = [[0, b], [a, 0], [0, 0], [a // 2, b], [a, b // 2], [a // 2, b // 2]]\n    res = []\n    for c in cands:\n        if c != case and valid(c) and c not in res:\n            res.append(c)\n    return res[:16]",
+    "confirmation_code": "def valid_input(stdin):\n    tokens = stdin.split()\n    if len(tokens) != 2:\n        return False\n    try:\n        a = int(tokens[0])\n        b = int(tokens[1])\n    except ValueError:\n        return False\n    return -100 <= a <= 100 and -100 <= b <= 100\n\ndef solve(stdin):\n    tokens = stdin.split()\n    a, b = int(tokens[0]), int(tokens[1])\n    return str(a + b)",
+    "candidate_hash": "0213b7e9529f39e4f6a294263b8f5daea9827363eec89bad1541058fb490fb19",
+    "primary_hash": "8b7430e901fd270d1954f7ebf1c31b6c869a91258dae184c73713a37b7be6284",
+    "confirmation_hash": "b210f9dd536872f7410e34dd6c8da5a30229ffa3b357391aade9351447ddd6bd"
+  },
+  "seed": 850,
+  "counts": {
+    "generated": 1,
+    "valid": 2,
+    "tested": 2,
+    "invalid": 0,
+    "timed_out": 0
+  },
+  "elapsed": 49.24919574998785,
+  "method": "Directly sums the two parsed integers.",
+  "explanation": "The source code computes `abs(a + b)` instead of returning the direct sum `a + b`. For the input `0 -1`, the sum is `-1`, but `abs(-1)` evaluates to `1`, causing the mismatch with the expected output `-1`.",
+  "explanation_ai_generated": true
+}

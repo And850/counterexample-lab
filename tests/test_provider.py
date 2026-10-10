@@ -158,3 +158,26 @@ def test_wire_source_limits_reject_embedded_breaks_or_oversized_lines(lines):
     from app.provider import Provider,StructuredResponseError
     p=Provider(protocol='openai',client=httpx.Client(transport=httpx.MockTransport(lambda req:response({'code_lines':lines,'method':'direct','small_input_limits':'two'}))))
     with pytest.raises(StructuredResponseError):p.generate_primary(problem(),time.monotonic()+10)
+
+
+def test_gemini_quota_error_is_explicit_sanitized_and_not_retried(monkeypatch):
+    from google import genai
+    from google.genai import errors
+    from app.provider import Provider,ProviderError
+    monkeypatch.setenv('GEMINI_API_KEY','test-only-placeholder')
+    class Models:
+        calls=0
+        async def generate_content(self,**kwargs):
+            self.calls+=1
+            raise errors.ClientError(429,{'error':{'message':'SECRET details','status':'RESOURCE_EXHAUSTED'}})
+    class Aio:
+        models=Models()
+        closed=False
+        async def aclose(self):self.closed=True
+    class Client:aio=Aio()
+    client=Client()
+    monkeypatch.setattr(genai,'Client',lambda **kwargs:client)
+    p=Provider(name='gemini')
+    with pytest.raises(ProviderError,match='quota') as caught:p.generate_primary(problem(),time.monotonic()+10)
+    assert 'SECRET' not in str(caught.value)
+    assert p.calls==1 and client.aio.models.calls==1 and client.aio.closed

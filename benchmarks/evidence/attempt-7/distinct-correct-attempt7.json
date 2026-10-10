@@ -1,0 +1,17 @@
+{
+  "outcome": "provider_failure",
+  "message": "Model service rejected the request",
+  "evidence": null,
+  "seed": 850,
+  "counts": {
+    "generated": 0,
+    "valid": 0,
+    "tested": 0,
+    "invalid": 0,
+    "timed_out": 0
+  },
+  "elapsed": 45.962978999945335,
+  "method": "",
+  "explanation": "",
+  "explanation_ai_generated": false
+}

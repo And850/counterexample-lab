@@ -1,6 +1,6 @@
 # Counterexample Lab Implementation Plan
 
-**Task 1 completion update (October 10):** The isolated runner, Python environment, minimal server, local-model smoke check, and 28 passing tests are complete. See [verification evidence](../task-1-status.md). LM Studio is the authorized zero-cost fallback and GitHub is the requested delivery repository. Gemini generation remains unverified; later provider work must support the selected local model and validate its known `reasoning_content` JSON routing. Core implementation began after kickoff. Tasks 2–4 are implemented; Task 5 has API/offline DOM verification with real-browser permission blocked; Task 6 evaluation is in progress.
+**Current status (October 11):** Tasks 1–4 are implemented and verified. Task 5 has API and offline DOM verification; real-browser access was denied by the session's permission policy. Both LM Studio and Gemini have produced real end-to-end corroborated evidence. Task 6's minimum benchmark target is met and the submission package is prepared. Real-browser verification and Devpost upload remain outstanding. See [verification evidence](../task-1-status.md) and [current progress](../progress.md). Core implementation began after kickoff; GitHub is the requested delivery repository.
 
 > For agentic workers: use superpowers:executing-plans to implement this plan task by task in the current session. Do not delegate unless separately authorized. Complete the verification associated with each task before proceeding.
 
@@ -15,7 +15,7 @@
 ## Global constraints
 
 - Zero spending; no billing activation, paid model fallback, or paid hosting.
-- Local browser application on `127.0.0.1:8000`, one active run, 180 seconds per run, at most four model calls.
+- Local browser application on loopback (currently `127.0.0.1:8002`), one active run, 180 seconds per run, at most four model calls.
 - C++17, integer/array problems, unique integer-token outputs; HTML/text and `.cpp`/text input only.
 - Never execute submitted/generated code directly on the host; no secrets or Docker socket inside runners.
 - No result claims universal correctness, global minimality, or proof based on generated-reference agreement.
@@ -42,7 +42,7 @@ Keep `app/` organized around ingestion, typed contracts, provider, runner, searc
 **Produces:** `Runner.prepare(role, sources)`, `Runner.compile_cpp(source)`, `Runner.execute(handle, stdin, deadline) -> ExecutionResult`, and `Runner.close()`; a readiness check and pinned dependencies.
 
 - [x] Resolve the Docker signal-9 issue with read-only diagnostics first. Verify server availability, ARM64 image builds, and process/resource controls. If Docker cannot run, report the prerequisite failure; do not replace it with host execution.
-- [x] Configure the authorized zero-cost local LM Studio fallback and pass a structured-output smoke check. Preserve optional Gemini configuration; its generation readiness remains explicitly unverified. No paid fallback.
+- [x] Configure the authorized zero-cost local LM Studio fallback and pass a structured-output smoke check. Preserve Gemini configuration; it was unverified at Task1 and subsequently passed live generation and evaluation. No paid fallback.
 - [x] Initialize the local Git repository, add ignores for virtual environments, `.env`, `.runs`, caches, and raw uploaded pages, then create the planned public repository under And850. Never commit credentials or personal saved-page content.
 - [x] Add the Python environment, minimal server skeleton, and runner image in the same task. Use GNU g++ in the image so Codeforces headers work on this Mac.
 - [x] Write runner integration tests for echo/sum, compilation failure, `bits/stdc++.h`, timeout, output overflow, child-process cleanup, blocked networking, and absence of host secrets/files.
@@ -108,7 +108,7 @@ Keep `app/` organized around ingestion, typed contracts, provider, runner, searc
 - [x] Serve input panels, sample editors, readiness status, stage/count progress, Cancel, and result details. `.cpp` upload fills the editable code field. Use text rendering, not HTML insertion, for all uploaded/model content.
 - [x] Poll once per second and stop polling terminal jobs. Preserve entered inputs when a run fails. Enforce loopback hosting, local Host validation, and same-origin writes.
 - [ ] Add browser tests for both upload and paste flows, keyboard controls, narrow layout, cancellation, compile errors, unconfirmed results, quota errors, and a successful fixture run. Clearly mark fixture-backed development mode; live demonstration uses the real provider.
-- [ ] Run the full pytest suite and Playwright journey. Verify no containers remain after success, failure, or cancellation; commit the working interface.
+- [x] Run the full pytest suite and offline DOM journeys, verify cleanup after success/failure/cancellation, and publish the interface. The planned real-browser journey remains outstanding because browser access was denied; the offline checks do not replace visual verification.
 
 
 ## Task 6 — Evaluation and submission package (about 2 hours, then buffer)
@@ -117,11 +117,11 @@ Keep `app/` organized around ingestion, typed contracts, provider, runner, searc
 
 - [x] Prepare five fixed problems with one reviewed correct and one incorrect C++ solution each. Include the uploaded cyclic-array problem; verify its sample answers through direct enumeration rather than trusting generated prose.
 - [x] Run all ten solutions through the real workflow with fixed seeds. Record model ID, API errors, tests, elapsed time, outcome, and whether the reduced case agrees with independently reviewed ground truth.
-- [ ] Require at least three of five incorrect candidates to produce corroborated cases within 180 seconds and zero false corroborated cases among correct controls. If the gate fails, improve reliability or report the narrower demonstrated coverage; do not hide failures or add features.
-- [ ] Run the regression and browser suites after fixes. Check a fresh setup using the documented image build and local launch commands.
-- [ ] Finish README setup, architecture explanation, supported scope, free API configuration, limitations, benchmark table, and secret-free public source. Push verified commits to And850/counterexample-lab.
-- [ ] Prepare the Devpost description and a 2–3 minute video script covering the original pain, a real successful run, reduced input, expected/actual results, and code walkthrough. Record the demo and supply local setup instructions as the access route.
-- [ ] Target submission readiness by October 11 at 19:30 Madrid time, ahead of the strict 20:59 deadline. Leave remaining time for upload and a final submission check.
+- [x] Require at least three of five incorrect candidates to produce corroborated cases within 180 seconds and zero false corroborated cases among correct controls. Complete Gemini round7 met the target; three correct controls were inconclusive and two failed at the provider stage. All 64 historical records are retained; failed preparation is not a correctness claim.
+- [x] Run regression and offline DOM suites after fixes; check fresh dependency installation, image build and local server/container execution from published source. Final regression: 103 passed. Real-browser suite remains blocked and is not claimed complete.
+- [x] Finish README setup, architecture explanation, supported scope, free API configuration, limitations, benchmark table, and secret-free public source. Publish verified commits to And850/counterexample-lab through the GitHub API.
+- [x] Prepare Devpost description, two-minute narration and recorded evidence walkthrough with real input/output and code example; supply local setup instructions. The 120-second local video is silent and labeled recorded evidence, not a browser recording. Narration/upload remain manual steps.
+- [x] Prepare the package ahead of October 11 at 19:30 Madrid time and strict 20:59 deadline. Leave time for real-browser review, video narration/upload and the final Devpost submission check. No Devpost submission has been made.
 
 ## Delivery order and stop conditions
 

@@ -1,0 +1,17 @@
+{
+  "outcome": "inconclusive",
+  "message": "No disagreement found within the tested cases and limits.",
+  "evidence": null,
+  "seed": 850,
+  "counts": {
+    "generated": 149,
+    "valid": 93,
+    "tested": 93,
+    "invalid": 0,
+    "timed_out": 1
+  },
+  "elapsed": 120.23670550005045,
+  "method": "Direct addition of two integers parsed from whitespace-separated text.",
+  "explanation": "",
+  "explanation_ai_generated": false
+}

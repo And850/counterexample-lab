@@ -43,13 +43,18 @@ def test_job_lifecycle_and_single_concurrency(monkeypatch,tmp_path):
     first=c.post('/api/runs',json=PAYLOAD)
     assert first.status_code==202,first.text
     id=first.json()['id'];assert ready.wait(2)
-    assert c.post('/api/runs',json=PAYLOAD).status_code==409
-    assert c.post('/api/runs/'+id+'/cancel').status_code==200
-    for _ in range(100):
-        snapshot=c.get('/api/runs/'+id).json()
-        if snapshot['terminal']:break
-        time.sleep(.02)
+    try:
+        time.sleep(.05)
+        assert c.get('/api/runs/'+id).json()['elapsed']>.02
+        assert c.post('/api/runs',json=PAYLOAD).status_code==409
+    finally:
+        assert c.post('/api/runs/'+id+'/cancel').status_code==200
+        for _ in range(100):
+            snapshot=c.get('/api/runs/'+id).json()
+            if snapshot['terminal']:break
+            time.sleep(.02)
     assert snapshot['result']['outcome']=='cancelled'
+    assert snapshot['elapsed']==snapshot['result']['elapsed']
 
 
 def test_readiness_failure_rejects_job(monkeypatch):

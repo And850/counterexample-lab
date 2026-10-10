@@ -57,5 +57,32 @@
     "max_output_tokens": 1100,
     "notes": "Clarified input rendering; complete JSON-only fences accepted; independent original constraints validated before host ground-truth enumeration.",
     "response_code_representation": "single JSON string"
+  },
+  "attempt_6": {
+    "provider": "lmstudio",
+    "api": "native",
+    "model_key": "qwen/qwen3.5-9b",
+    "model_alias": "counterexample-local",
+    "format": "MLX safetensors",
+    "quantization": "4bit",
+    "context_length": 8192,
+    "reasoning": "off",
+    "machine": "Apple M1 Pro, 16 GB RAM",
+    "temperature": 0.1,
+    "max_output_tokens": 1100,
+    "response_code_representation": "array of physical source lines",
+    "source_commit": "e39e678493ca55d397a65d3cae710755f1411afa",
+    "provider_source_sha256": "568a07181158ce97bd43bd3efc4d0e953d7972b56c99731ec6e1f4284ae9996e",
+    "notes": "Bounded source lines joined to unchanged external bundle and sample-checked only in Docker. Independent constraints guard host ground-truth enumeration."
+  },
+  "attempt_7": {
+    "provider": "gemini",
+    "api": "google-genai",
+    "model_key": "gemini-3.8-flash",
+    "model_alias": "gemini-3.8-flash",
+    "response_code_representation": "array of physical source lines",
+    "temperature": 0.2,
+    "max_output_tokens": 2048,
+    "notes": "Previously configured Free-tier project; billing unchanged. Evaluated in a separate artifact/output directory alongside local round6, then merged without dropping records. Gemini selected as app default after three real wrong-control successes; local model configuration retained as a manual alternative."
   }
 }

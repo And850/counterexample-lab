@@ -1,6 +1,6 @@
 # Live evaluation
 
-40 recorded runs across 5 fixed problems. Seed: 850. See `models.json` for loaded model/configuration and `prompt-versions.json` for prompt text. Every failed preparation or service request is retained.
+64 recorded runs across 5 fixed problems. Seed: 850. See `models.json` for loaded model/configuration and `prompt-versions.json` for prompt text. Every failed preparation or service request is retained.
 
 ## Attempt round 1
 
@@ -68,7 +68,7 @@ Interrupted-attempt time is the last logged progress, a lower bound (>=), not a 
 
 ## Attempt round 5
 
-6/10 runs recorded. 0/5 wrong controls produced independently reviewed, valid corroborated evidence within 180 seconds.
+10/10 runs recorded. 1/5 wrong controls produced independently reviewed, valid corroborated evidence within 180 seconds.
 
 | Problem | Candidate | Outcome | Seconds | Tested | Ground truth checked |
 |---|---|---|---:|---:|---|
@@ -78,10 +78,48 @@ Interrupted-attempt time is the last logged progress, a lower bound (>=), not a 
 | nonempty-interval | correct | preparation_failure | 59.05 | 0 | not checked |
 | knapsack | wrong | preparation_failure | 78.66 | 0 | not checked |
 | knapsack | correct | preparation_failure | 79.07 | 0 | not checked |
+| distinct | wrong | corroborated_counterexample | 85.00 | 27 | agrees |
+| distinct | correct | inconclusive | 120.18 | 94 | not checked |
+| cyclic-snowmen | wrong | provider_failure | 47.35 | 0 | not checked |
+| cyclic-snowmen | correct | provider_failure | 47.42 | 0 | not checked |
+
+## Attempt round 6
+
+10/10 runs recorded. 1/5 wrong controls produced independently reviewed, valid corroborated evidence within 180 seconds.
+
+| Problem | Candidate | Outcome | Seconds | Tested | Ground truth checked |
+|---|---|---|---:|---:|---|
+| sum | wrong | provider_failure | 71.70 | 0 | not checked |
+| sum | correct | provider_failure | 17.09 | 0 | not checked |
+| nonempty-interval | wrong | preparation_failure | 80.59 | 0 | not checked |
+| nonempty-interval | correct | provider_failure | 46.93 | 0 | not checked |
+| knapsack | wrong | corroborated_counterexample | 116.69 | 12 | agrees |
+| knapsack | correct | provider_failure | 79.65 | 0 | not checked |
+| distinct | wrong | provider_failure | 83.95 | 0 | not checked |
+| distinct | correct | provider_failure | 47.19 | 0 | not checked |
+| cyclic-snowmen | wrong | provider_failure | 47.31 | 0 | not checked |
+| cyclic-snowmen | correct | provider_failure | 47.06 | 0 | not checked |
+
+## Attempt round 7
+
+10/10 runs recorded. 3/5 wrong controls produced independently reviewed, valid corroborated evidence within 180 seconds.
+
+| Problem | Candidate | Outcome | Seconds | Tested | Ground truth checked |
+|---|---|---|---:|---:|---|
+| sum | wrong | corroborated_counterexample | 49.25 | 2 | agrees |
+| sum | correct | inconclusive | 120.24 | 93 | not checked |
+| nonempty-interval | wrong | corroborated_counterexample | 35.34 | 2 | agrees |
+| nonempty-interval | correct | inconclusive | 120.33 | 88 | not checked |
+| knapsack | wrong | corroborated_counterexample | 59.41 | 19 | agrees |
+| knapsack | correct | inconclusive | 120.17 | 111 | not checked |
+| distinct | wrong | unconfirmed_disagreement | 74.74 | 20 | agrees |
+| distinct | correct | provider_failure | 45.96 | 0 | not checked |
+| cyclic-snowmen | wrong | provider_failure | 22.06 | 0 | not checked |
+| cyclic-snowmen | correct | provider_failure | 1.82 | 0 | not checked |
 
 ## Acceptance assessment
 
-Observed coverage across the recorded rounds: **2/5** wrong-control problems. False corroborated findings on correct controls: **0**. Minimum target (3/5 in a complete ten-run round, and zero false findings): **not met**; this is not a guarantee of general performance.
+Observed coverage across the recorded rounds: **4/5** wrong-control problems. False corroborated findings on correct controls: **0**. Minimum target (3/5 in a complete ten-run round, and zero false findings): **met on these fixed problems**; this is not a guarantee of general performance.
 
 Repeated rounds use fresh model generations and are reported separately. Coverage across rounds is not a first-attempt success rate. Preparation failures and inconclusive searches are not evidence of correctness. Several controls may fail preparation; the table makes that visible.
 

@@ -14,7 +14,7 @@ A fresh independent model request receives only the statement and samples. A mis
 
 ## How I built it
 
-Python, FastAPI, Pydantic, Beautiful Soup, a buildless HTML/CSS/JavaScript interface, GNU C++17, and restricted Docker execution. LM Studio serves a local Qwen3.5-9B model, so the demonstrated workflow requires no paid API. Gemini remains an optional adapter whose live generation has not passed on this development machine.
+Python, FastAPI, Pydantic, Beautiful Soup, a buildless HTML/CSS/JavaScript interface, GNU C++17, and restricted Docker execution. Gemini 3.8 Flash serves structured model responses on the project's Free tier. LM Studio with local Qwen3.5-9B is an alternative requiring no API account. Both providers have produced real corroborated evidence; the repository reports their failures as well as their successes.
 
 All generated and submitted code executes in separate restricted role containers. The host handles orchestration and structured data. Runs have a shared deadline, limited model calls, one repair allowance, cancellation, and bounded output.
 
@@ -26,11 +26,15 @@ Native LM Studio generation with reasoning disabled worked better than the schem
 
 ## Accomplishments
 
-A live model-assisted run found and corroborated an absolute-sum bug: input `0 -100`, expected `-100`, actual `100`, in approximately 56 seconds. Deterministic regression tests exercise wrong references, correct controls, invalid proposals, coupled arrays, cancellation and container containment. All five fixed benchmark problems and both controls per problem are reported in the repository, including unsuccessful attempts.
+A live Gemini run found and corroborated an absolute-sum bug: input `0 -1`, expected `-1`, actual `1`, in 28.7 seconds. A preserved local-model benchmark found `0 -100`, expected `-100`, actual `100`, in 85.3 seconds and supplies the evidence walkthrough video. Deterministic regression tests exercise wrong references, correct controls, invalid proposals, coupled arrays, cancellation and container containment. All five fixed benchmark problems and both controls per problem are reported in the repository, including unsuccessful attempts.
+
+The complete Gemini round corroborated 3/5 wrong controls with zero false corroborated correct-control findings. Three correct controls completed inconclusively; two failed at the provider stage. The repository retains 64 runs across seven rounds and full results for all ten Gemini controls. All 103 regression tests and offline interface journeys pass.
 
 ## Limitations and next steps
 
 No disagreement within the budget is inconclusive. Two AI references can share a mistake; corroboration is not proof. Small-input testing can miss large-input bugs, and reduction does not establish global minimality. This version supports unique integer-token outputs in C++17; Java, PDF and custom output checkers remain future work.
+
+The distinct-counting Gemini result stayed unconfirmed because its second reference did not finish. Cyclic-array generation failed on truncation and quota limits. Free API quotas constrain repeated runs; the app reports these failures and does not activate billing or change provider automatically.
 
 Real browser/visual verification was blocked by this development session's browser permission policy. Offline DOM interaction checks and API tests are available; this limitation is disclosed rather than hidden.
 
@@ -38,4 +42,4 @@ Real browser/visual verification was blocked by this development session's brows
 
 Source and setup: https://github.com/And850/counterexample-lab
 
-Run locally with Docker and LM Studio, then open the loopback browser interface. A public execution service is outside this project. See the README for exact commands and evaluation results.
+Run locally with Docker and either Gemini or LM Studio, then open the loopback browser interface. A public execution service is outside this project. See the README for exact commands and evaluation results.

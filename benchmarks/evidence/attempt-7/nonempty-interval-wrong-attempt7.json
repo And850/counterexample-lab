@@ -1,0 +1,36 @@
+{
+  "outcome": "corroborated_counterexample",
+  "message": "Both sample-checked references and validators agree on this executed failing input. Reduced locally; global minimality is not claimed.",
+  "evidence": {
+    "stdin": "1\n-1",
+    "expected": "-1",
+    "actual": {
+      "status": "ok",
+      "stdout": "0",
+      "stderr": "",
+      "exit_code": 0,
+      "elapsed": 0.004860000000007858
+    },
+    "confirmation": "-1",
+    "references_agree": true,
+    "validators_agree": true,
+    "samples_checked": true,
+    "primary_code": "import random\n\ndef parse(stdin):\n    t = list(map(int, stdin.split()))\n    assert len(t) >= 1 and t[0] == len(t) - 1\n    return t[1:]\n\ndef render(case):\n    return str(len(case)) + chr(10) + \" \".join(map(str, case))\n\ndef valid(case):\n    return isinstance(case, list) and 1 <= len(case) <= 8 and all(isinstance(x, int) and not isinstance(x, bool) and -9 <= x <= 9 for x in case)\n\ndef solve(stdin):\n    a = parse(stdin)\n    return str(max(sum(a[i:j]) for i in range(len(a)) for j in range(i + 1, len(a) + 1)))\n\ndef generate(seed, index, mode):\n    if mode == \"exhaustive\":\n        if index < 3:\n            return [index - 1]\n        if index < 12:\n            k = index - 3\n            return [k // 3 - 1, k % 3 - 1]\n        return None\n    if mode == \"random\":\n        rnd = random.Random(seed + index)\n        n = rnd.randint(1, 8)\n        return [rnd.randint(-9, 9) for _ in range(n)]\n    b = [[-9], [9], [0], [-9] * 8, [9] * 8, [0] * 8, [-9, 9] * 4, [9, -9] * 4]\n    return b[index % len(b)]\n\ndef shrink(case):\n    res = []\n    if len(case) > 1:\n        for i in range(len(case)):\n            res.append(case[:i] + case[i + 1:])\n    for i in range(len(case)):\n        if case[i] != 0:\n            c1, c2 = list(case), list(case)\n            c1[i] = 0\n            c2[i] = int(case[i] / 2)\n            res.extend([c1, c2])\n    out, seen = [], set()\n    for c in res:\n        t = tuple(c)\n        if valid(c) and t != tuple(case) and t not in seen:\n            seen.add(t)\n            out.append(c)\n            if len(out) == 16:\n                break\n    return out",
+    "confirmation_code": "def valid_input(stdin):\n    try:\n        tokens = stdin.split()\n        if not tokens:\n            return False\n        n = int(tokens[0])\n        if not (1 <= n <= 8):\n            return False\n        if len(tokens) != 1 + n:\n            return False\n        for t in tokens[1:]:\n            val = int(t)\n            if not (-9 <= val <= 9):\n                return False\n        return True\n    except Exception:\n        return False\n\ndef solve(stdin):\n    tokens = stdin.split()\n    n = int(tokens[0])\n    a = [int(x) for x in tokens[1:1 + n]]\n    ans = max(sum(a[i:j]) for i in range(n) for j in range(i + 1, n + 1))\n    return str(ans)",
+    "candidate_hash": "3e030d4fac5088818fe449765678abe39b66f268255ebfdcabbc06b815b1b7f8",
+    "primary_hash": "d2d1f919cd2904f07b6b8dfe7a0a1a0551c6aa47e94e8da433a849b1984bd8d2",
+    "confirmation_hash": "33d0cb5e28dd3c7ba350bae77fafa253b59ab37ec351377f9687267c0980587b"
+  },
+  "seed": 850,
+  "counts": {
+    "generated": 1,
+    "valid": 2,
+    "tested": 2,
+    "invalid": 0,
+    "timed_out": 0
+  },
+  "elapsed": 35.3427158750128,
+  "method": "Brute-force checks all nonempty contiguous subsegment sums.",
+  "explanation": "The program initializes the best sum b and current sum s to 0, and updates s with max(0, s + x), effectively allowing an empty subarray sum of 0. For an input consisting solely of negative numbers (such as -1), the expected output requires a non-empty contiguous subsegment sum (-1), whereas the program outputs 0.",
+  "explanation_ai_generated": true
+}

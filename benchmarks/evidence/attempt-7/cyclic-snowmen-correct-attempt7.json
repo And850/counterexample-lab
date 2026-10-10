@@ -1,0 +1,17 @@
+{
+  "outcome": "provider_failure",
+  "message": "Model quota/rate limit reached",
+  "evidence": null,
+  "seed": 850,
+  "counts": {
+    "generated": 0,
+    "valid": 0,
+    "tested": 0,
+    "invalid": 0,
+    "timed_out": 0
+  },
+  "elapsed": 1.8166142919799313,
+  "method": "",
+  "explanation": "",
+  "explanation_ai_generated": false
+}

@@ -1,0 +1,17 @@
+{
+  "outcome": "inconclusive",
+  "message": "No disagreement found within the tested cases and limits.",
+  "evidence": null,
+  "seed": 850,
+  "counts": {
+    "generated": 127,
+    "valid": 112,
+    "tested": 111,
+    "invalid": 0,
+    "timed_out": 1
+  },
+  "elapsed": 120.171785500017,
+  "method": "Brute-force subset enumeration for 0-1 knapsack.",
+  "explanation": "",
+  "explanation_ai_generated": false
+}

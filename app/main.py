@@ -119,10 +119,11 @@ def create_run(payload: RunRequest):
         while len(_jobs) >= 32:
             del _jobs[next(iter(_jobs))]
         id = uuid.uuid4().hex
-        runner = Runner(RUNS_ROOT, deadline=time.monotonic()+180)
+        started = time.monotonic()
+        runner = Runner(RUNS_ROOT, deadline=started+180)
         cancel = threading.Event()
         snapshot = RunSnapshot(id=id)
-        _jobs[id] = {'snapshot': snapshot, 'runner': runner, 'cancel': cancel}
+        _jobs[id] = {'snapshot': snapshot, 'runner': runner, 'cancel': cancel, 'started': started}
         path = runner.root / 'request.json'
         path.write_text(payload.model_dump_json(indent=2)); path.chmod(0o600)
         threading.Thread(target=_work, args=(id, payload, runner, cancel), daemon=True).start()
@@ -134,7 +135,11 @@ def get_run(id: str):
     with _lock:
         if id not in _jobs:
             raise HTTPException(404, 'Unknown run ID.')
-        return _jobs[id]['snapshot'].model_copy(deep=True)
+        job = _jobs[id]
+        snapshot = job['snapshot'].model_copy(deep=True)
+        if not snapshot.terminal:
+            snapshot.elapsed = max(snapshot.elapsed, time.monotonic()-job['started'])
+        return snapshot
 
 
 @app.post('/api/runs/{id}/cancel')
