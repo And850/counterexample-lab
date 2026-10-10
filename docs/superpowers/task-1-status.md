@@ -84,4 +84,4 @@ Sources:
 
 ## Remaining Task 1 acceptance
 
-Implementation and verification are complete. Publish the verified files directly to `And850/counterexample-lab` as requested. Task 2 has not started; the arithmetic smoke does not establish generated-reference quality.
+Implementation, verification, and direct GitHub delivery are complete. The verified implementation commit is [8271611](https://github.com/And850/counterexample-lab/commit/827161198c39d246440a9f802520a2d35c1de748). Nineteen allowlisted project files were published; credentials, environments, run artifacts, and raw uploaded pages were excluded. Task 2 has not started; the arithmetic smoke does not establish generated-reference quality.
