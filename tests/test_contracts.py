@@ -47,3 +47,11 @@ def test_results_cannot_claim_confirmation_without_evidence():
     with pytest.raises(ValidationError):
         CounterexampleResult(outcome='corroborated_counterexample', message='Found')
     assert CounterexampleResult(outcome='inconclusive', message='No case within limits').outcome == 'inconclusive'
+
+
+def test_disagreeing_references_cannot_claim_corroboration():
+    from app.contracts import CounterexampleResult, Evidence, ExecutionResult
+
+    evidence = Evidence(stdin='2 3', expected='5', confirmation='6', validators_agree=True, samples_checked=True, actual=ExecutionResult(status='ok', stdout='7'))
+    with pytest.raises(ValidationError):
+        CounterexampleResult(outcome='corroborated_counterexample', message='Found', evidence=evidence)

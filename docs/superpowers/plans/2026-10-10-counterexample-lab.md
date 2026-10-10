@@ -1,6 +1,6 @@
 # Counterexample Lab Implementation Plan
 
-**Task 1 completion update (October 10):** The isolated runner, Python environment, minimal server, local-model smoke check, and 28 passing tests are complete. See [verification evidence](../task-1-status.md). LM Studio is the authorized zero-cost fallback and GitHub is the requested delivery repository. Gemini generation remains unverified; later provider work must support the selected local model and validate its known `reasoning_content` JSON routing. Core implementation began after kickoff. Tasks 2–6 remain pending.
+**Task 1 completion update (October 10):** The isolated runner, Python environment, minimal server, local-model smoke check, and 28 passing tests are complete. See [verification evidence](../task-1-status.md). LM Studio is the authorized zero-cost fallback and GitHub is the requested delivery repository. Gemini generation remains unverified; later provider work must support the selected local model and validate its known `reasoning_content` JSON routing. Core implementation began after kickoff. Tasks 2–4 are implemented; Task 5 has API/offline DOM verification with real-browser permission blocked; Task 6 evaluation is in progress.
 
 > For agentic workers: use superpowers:executing-plans to implement this plan task by task in the current session. Do not delegate unless separately authorized. Complete the verification associated with each task before proceeding.
 
@@ -70,13 +70,13 @@ Keep `app/` organized around ingestion, typed contracts, provider, runner, searc
 **Consumes:** `ProblemInput`, the runner, and an absolute monotonic deadline.
 **Produces:** `Provider.generate_primary(problem, deadline) -> GeneratedBundle`, `Provider.generate_confirmation(problem, deadline)`, `Provider.explain(evidence, deadline)`, and a checked harness handle.
 
-- [ ] Write mocked-provider tests for valid structured JSON, schema failures, truncated responses, empty code, sample mismatch, syntax errors, request timeout, missing credentials, and rate limiting.
-- [ ] Use the Google GenAI SDK with JSON-schema structured responses and local Pydantic validation. The primary prompt receives only statement/samples and demands exhaustive small-input reasoning, valid deterministic generators, and structure-aware reductions.
-- [ ] Compile/check generated modules only in their runner roles. Check every sample and parser round trip before search. Permit one repair across the complete run; preserve the failure if repair is exhausted.
-- [ ] Implement four-call and 45-second-per-call ceilings within the shared deadline. Stop on quota exhaustion; no automatic paid or provider fallback. Never log authorization headers.
-- [ ] Define a new confirmation request with no prior conversation, candidate code, primary implementation, or observed answers. Require its own input validator and general reference solver.
-- [ ] Add an explicit live smoke command for developers; ordinary automated tests remain offline and deterministic. Record only nonsecret evidence from the live prerequisite check.
-- [ ] Run `python -m pytest tests/test_provider.py tests/test_preparation.py -q`; commit when passing.
+- [x] Write mocked-provider tests for valid structured JSON, schema failures, truncated responses, empty code, sample mismatch, syntax errors, request timeout, missing credentials, and rate limiting.
+- [x] Use the Google GenAI SDK with JSON-schema structured responses and local Pydantic validation. The primary prompt receives only statement/samples and demands exhaustive small-input reasoning, valid deterministic generators, and structure-aware reductions.
+- [x] Compile/check generated modules only in their runner roles. Check every sample and parser round trip before search. Permit one repair across the complete run; preserve the failure if repair is exhausted.
+- [x] Implement four-call and 45-second-per-call ceilings within the shared deadline. Stop on quota exhaustion; no automatic paid or provider fallback. Never log authorization headers.
+- [x] Define a new confirmation request with no prior conversation, candidate code, primary implementation, or observed answers. Require its own input validator and general reference solver.
+- [x] Add an explicit live smoke command for developers; ordinary automated tests remain offline and deterministic. Record only nonsecret evidence from the live prerequisite check.
+- [x] Run `python -m pytest tests/test_provider.py tests/test_preparation.py -q`; commit when passing.
 
 ## Task 4 — Search, corroborate, and reduce (about 3 hours)
 
@@ -85,14 +85,16 @@ Keep `app/` organized around ingestion, typed contracts, provider, runner, searc
 **Consumes:** A prepared primary harness, compiled candidate handle, provider, seed, and deadline.
 **Produces:** `search(problem, candidate, seed, deadline, cancel, on_progress) -> CounterexampleResult`, including evidence and failure classification.
 
-- [ ] Use hand-authored fixture bundles to write deterministic tests before connecting live AI. Include a correct candidate, a greedy algorithm failure, invalid generator outputs, and a wrong primary oracle that agrees with samples.
-- [ ] Implement sample-first search, up to 256 tiny exhaustive candidates, alternating seeded random/adversarial candidates, deduplication, and the 10,000-candidate/120-second first-disagreement limits. Count invalid and timed-out cases separately.
-- [ ] Parse output as signed arbitrary-precision integer tokens, ignoring whitespace only. Test large integers, missing/extra tokens, noninteger output, crashes, and timeouts.
-- [ ] On disagreement, execute the separately generated reference against samples and the case. Require both validators and both references to agree before marking corroborated. Keep an unconfirmed result if any check fails or cannot finish.
-- [ ] Implement reduction with the spec's strict decreasing complexity measure and fresh executions of the candidate and both references. Test coupled array lengths, aggregate constraints, invalid reductions, duplicate proposals, and interruption mid-reduction.
-- [ ] Keep the last corroborated case when the deadline expires. Generate an explanation only from executed evidence and only if the remaining call/time budget permits; return useful evidence when explanation fails.
-- [ ] Assert that a correct fixture solution yields only an inconclusive outcome, never an assertion of correctness; an oracle disagreement must never be called a corroborated counterexample.
-- [ ] Run `python -m pytest tests/test_search.py tests/test_reduction.py -q`; commit the engine after passing.
+- [x] Use hand-authored fixture bundles to write deterministic tests before connecting live AI. Include a correct candidate, a greedy algorithm failure, invalid generator outputs, and a wrong primary oracle that agrees with samples.
+- [x] Implement sample-first search, up to 256 tiny exhaustive candidates, alternating seeded random/adversarial candidates, deduplication, and the 10,000-candidate/120-second first-disagreement limits. Count invalid and timed-out cases separately.
+- [x] Parse output as signed arbitrary-precision integer tokens, ignoring whitespace only. Test large integers, missing/extra tokens, noninteger output, crashes, and timeouts.
+- [x] On disagreement, execute the separately generated reference against samples and the case. Require both validators and both references to agree before marking corroborated. Keep an unconfirmed result if any check fails or cannot finish.
+- [x] Implement reduction with the spec's strict decreasing complexity measure and fresh executions of the candidate and both references. Test coupled array lengths, aggregate constraints, invalid reductions, duplicate proposals, and interruption mid-reduction.
+- [x] Keep the last corroborated case when the deadline expires. Generate an explanation only from executed evidence and only if the remaining call/time budget permits; return useful evidence when explanation fails.
+- [x] Assert that a correct fixture solution yields only an inconclusive outcome, never an assertion of correctness; an oracle disagreement must never be called a corroborated counterexample.
+- [x] Run `python -m pytest tests/test_search.py tests/test_reduction.py -q`; commit the engine after passing.
+
+**October 10 verification note:** Native LM Studio JSON is validated locally rather than decoder-constrained. The engine yields exhaustive search after bounded time or repeated cases to reserve time for random/adversarial modes. Container lifecycle deadlines include a reserved cleanup interval. See progress for evidence and verification gaps.
 
 ## Task 5 — Browser workflow and job lifecycle (about 2.5 hours)
 
@@ -101,12 +103,13 @@ Keep `app/` organized around ingestion, typed contracts, provider, runner, searc
 **Consumes:** Ingestion, validated contracts, runner, provider, and search engine.
 **Produces:** The five HTTP routes defined in the spec and the buildless interface.
 
-- [ ] Write API tests for import, run creation, one-job concurrency, unknown IDs, cancellation, readiness failure, invalid samples, and safe error responses.
-- [ ] Add a single in-process asynchronous job registry; offload blocking subprocess work so polling/cancellation stay responsive. Persist bounded artifacts under `.runs/<uuid>/`; no database or resume protocol.
-- [ ] Serve input panels, sample editors, readiness status, stage/count progress, Cancel, and result details. `.cpp` upload fills the editable code field. Use text rendering, not HTML insertion, for all uploaded/model content.
-- [ ] Poll once per second and stop polling terminal jobs. Preserve entered inputs when a run fails. Enforce loopback hosting, local Host validation, and same-origin writes.
+- [x] Write API tests for import, run creation, one-job concurrency, unknown IDs, cancellation, readiness failure, invalid samples, and safe error responses.
+- [x] Add a single in-process asynchronous job registry; offload blocking subprocess work so polling/cancellation stay responsive. Persist bounded artifacts under `.runs/<uuid>/`; no database or resume protocol.
+- [x] Serve input panels, sample editors, readiness status, stage/count progress, Cancel, and result details. `.cpp` upload fills the editable code field. Use text rendering, not HTML insertion, for all uploaded/model content.
+- [x] Poll once per second and stop polling terminal jobs. Preserve entered inputs when a run fails. Enforce loopback hosting, local Host validation, and same-origin writes.
 - [ ] Add browser tests for both upload and paste flows, keyboard controls, narrow layout, cancellation, compile errors, unconfirmed results, quota errors, and a successful fixture run. Clearly mark fixture-backed development mode; live demonstration uses the real provider.
 - [ ] Run the full pytest suite and Playwright journey. Verify no containers remain after success, failure, or cancellation; commit the working interface.
+
 
 ## Task 6 — Evaluation and submission package (about 2 hours, then buffer)
 

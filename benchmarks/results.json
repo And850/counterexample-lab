@@ -1,0 +1,222 @@
+[
+  {
+    "problem": "sum",
+    "candidate": "wrong",
+    "provider": "lmstudio",
+    "model": "counterexample-local",
+    "outcome": "corroborated_counterexample",
+    "elapsed": 85.33,
+    "counts": {
+      "generated": 1,
+      "valid": 2,
+      "tested": 2,
+      "invalid": 0,
+      "timed_out": 0
+    },
+    "ground_truth_agrees": true,
+    "message": "Both sample-checked references and validators agree on this executed failing input. Reduced locally; global minimality is not claimed.",
+    "attempt": 1,
+    "prompt_version": "0954665fbb5c291640a5d2932be9b2ec9c87d88b39f98583571541acfa93362e",
+    "ground_truth_checked": true,
+    "input_valid": true,
+    "actual_disagrees": true
+  },
+  {
+    "problem": "sum",
+    "candidate": "correct",
+    "provider": "lmstudio",
+    "model": "counterexample-local",
+    "outcome": "inconclusive",
+    "elapsed": 120.05,
+    "counts": {
+      "generated": 113,
+      "valid": 114,
+      "tested": 114,
+      "invalid": 0,
+      "timed_out": 1
+    },
+    "ground_truth_agrees": false,
+    "message": "No disagreement found within the tested cases and limits.",
+    "attempt": 1,
+    "prompt_version": "0954665fbb5c291640a5d2932be9b2ec9c87d88b39f98583571541acfa93362e",
+    "ground_truth_checked": false,
+    "input_valid": false,
+    "actual_disagrees": null
+  },
+  {
+    "problem": "nonempty-interval",
+    "candidate": "wrong",
+    "provider": "lmstudio",
+    "model": "counterexample-local",
+    "outcome": "preparation_failure",
+    "elapsed": 69.76,
+    "counts": {
+      "generated": 0,
+      "valid": 0,
+      "tested": 0,
+      "invalid": 0,
+      "timed_out": 0
+    },
+    "ground_truth_agrees": false,
+    "message": "Primary reference failed sample, input validation, or round trip",
+    "attempt": 1,
+    "prompt_version": "0954665fbb5c291640a5d2932be9b2ec9c87d88b39f98583571541acfa93362e",
+    "ground_truth_checked": false,
+    "input_valid": false,
+    "actual_disagrees": null
+  },
+  {
+    "problem": "nonempty-interval",
+    "candidate": "correct",
+    "provider": "lmstudio",
+    "model": "counterexample-local",
+    "outcome": "preparation_failure",
+    "elapsed": 64.11,
+    "counts": {
+      "generated": 0,
+      "valid": 0,
+      "tested": 0,
+      "invalid": 0,
+      "timed_out": 0
+    },
+    "ground_truth_agrees": false,
+    "message": "Primary reference failed sample, input validation, or round trip",
+    "attempt": 1,
+    "prompt_version": "0954665fbb5c291640a5d2932be9b2ec9c87d88b39f98583571541acfa93362e",
+    "ground_truth_checked": false,
+    "input_valid": false,
+    "actual_disagrees": null
+  },
+  {
+    "problem": "knapsack",
+    "candidate": "wrong",
+    "provider": "lmstudio",
+    "model": "counterexample-local",
+    "outcome": "inconclusive",
+    "elapsed": 120.53,
+    "counts": {
+      "generated": 88,
+      "valid": 89,
+      "tested": 89,
+      "invalid": 0,
+      "timed_out": 1
+    },
+    "ground_truth_agrees": false,
+    "message": "No disagreement found within the tested cases and limits.",
+    "attempt": 1,
+    "prompt_version": "0954665fbb5c291640a5d2932be9b2ec9c87d88b39f98583571541acfa93362e",
+    "ground_truth_checked": false,
+    "input_valid": false,
+    "actual_disagrees": null
+  },
+  {
+    "problem": "knapsack",
+    "candidate": "correct",
+    "provider": "lmstudio",
+    "model": "counterexample-local",
+    "outcome": "preparation_failure",
+    "elapsed": 89.6,
+    "counts": {
+      "generated": 0,
+      "valid": 0,
+      "tested": 0,
+      "invalid": 0,
+      "timed_out": 0
+    },
+    "ground_truth_agrees": false,
+    "message": "Reference operation sample failed: runtime_error\nTraceback (most recent call last):\n  File \"/sources/main.py\", line 69, in <module>\n    main()\n  File \"/sources/main.py\", line 39, in main\n    result = {'case': case, 'rendered': rendered, 'valid': module.valid(case), 'roundtrip': module.parse(rendered) == case, 'output': module.solve(request['stdin'])}\n                                                                                                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/sources/generated.py\", line 35, in solve\n    n, W = c['n'], c['W']\n           ~^^^^^\nTypeError: string indices must be integers, not 'str'\n",
+    "attempt": 1,
+    "prompt_version": "0954665fbb5c291640a5d2932be9b2ec9c87d88b39f98583571541acfa93362e",
+    "ground_truth_checked": false,
+    "input_valid": false,
+    "actual_disagrees": null
+  },
+  {
+    "problem": "distinct",
+    "candidate": "wrong",
+    "provider": "lmstudio",
+    "model": "counterexample-local",
+    "outcome": "preparation_failure",
+    "elapsed": 64.02,
+    "counts": {
+      "generated": 0,
+      "valid": 0,
+      "tested": 0,
+      "invalid": 0,
+      "timed_out": 0
+    },
+    "ground_truth_agrees": false,
+    "message": "Primary reference failed sample, input validation, or round trip",
+    "attempt": 1,
+    "prompt_version": "0954665fbb5c291640a5d2932be9b2ec9c87d88b39f98583571541acfa93362e",
+    "ground_truth_checked": false,
+    "input_valid": false,
+    "actual_disagrees": null
+  },
+  {
+    "problem": "distinct",
+    "candidate": "correct",
+    "provider": "lmstudio",
+    "model": "counterexample-local",
+    "outcome": "preparation_failure",
+    "elapsed": 57.53,
+    "counts": {
+      "generated": 0,
+      "valid": 0,
+      "tested": 0,
+      "invalid": 0,
+      "timed_out": 0
+    },
+    "ground_truth_agrees": false,
+    "message": "Reference operation sample failed: runtime_error\nTraceback (most recent call last):\n  File \"/sources/main.py\", line 69, in <module>\n    main()\n  File \"/sources/main.py\", line 38, in main\n    rendered = module.render(case)\n               ^^^^^^^^^^^^^^^^^^^\n  File \"/sources/generated.py\", line 19, in render\n    return json.dumps([c['n']] + c['a'])\n                       ~^^^^^\nTypeError: 'NoneType' object is not subscriptable\n",
+    "attempt": 1,
+    "prompt_version": "0954665fbb5c291640a5d2932be9b2ec9c87d88b39f98583571541acfa93362e",
+    "ground_truth_checked": false,
+    "input_valid": false,
+    "actual_disagrees": null
+  },
+  {
+    "problem": "cyclic-snowmen",
+    "candidate": "wrong",
+    "provider": "lmstudio",
+    "model": "counterexample-local",
+    "outcome": "provider_failure",
+    "elapsed": 42.95,
+    "counts": {
+      "generated": 0,
+      "valid": 0,
+      "tested": 0,
+      "invalid": 0,
+      "timed_out": 0
+    },
+    "ground_truth_agrees": false,
+    "message": "Model response failed structured validation",
+    "attempt": 1,
+    "prompt_version": "0954665fbb5c291640a5d2932be9b2ec9c87d88b39f98583571541acfa93362e",
+    "ground_truth_checked": false,
+    "input_valid": false,
+    "actual_disagrees": null
+  },
+  {
+    "problem": "cyclic-snowmen",
+    "candidate": "correct",
+    "provider": "lmstudio",
+    "model": "counterexample-local",
+    "outcome": "provider_failure",
+    "elapsed": 40.51,
+    "counts": {
+      "generated": 0,
+      "valid": 0,
+      "tested": 0,
+      "invalid": 0,
+      "timed_out": 0
+    },
+    "ground_truth_agrees": false,
+    "message": "Model response failed structured validation",
+    "attempt": 1,
+    "prompt_version": "0954665fbb5c291640a5d2932be9b2ec9c87d88b39f98583571541acfa93362e",
+    "ground_truth_checked": false,
+    "input_valid": false,
+    "actual_disagrees": null
+  }
+]

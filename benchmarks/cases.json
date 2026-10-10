@@ -1,0 +1,82 @@
+[
+  {
+    "id": "sum",
+    "problem": {
+      "title": "",
+      "statement": "Input exactly two whitespace-separated integers a,b, -100<=a,b<=100. Output a+b as one integer.",
+      "samples": [
+        {
+          "stdin": "2 3",
+          "stdout": "5"
+        }
+      ],
+      "warnings": []
+    },
+    "correct": "#include <bits/stdc++.h>\nusing namespace std;\nint main(){long long a,b;cin>>a>>b;cout<<a+b;}",
+    "wrong": "#include <bits/stdc++.h>\nusing namespace std;\nint main(){long long a,b;cin>>a>>b;cout<<abs(a+b);}"
+  },
+  {
+    "id": "nonempty-interval",
+    "problem": {
+      "title": "",
+      "statement": "Input n (1<=n<=8), followed by exactly n integers a[i] (-9<=a[i]<=9). Output the maximum sum over all NONEMPTY contiguous intervals. No test-count header.",
+      "samples": [
+        {
+          "stdin": "3\n1 -2 3",
+          "stdout": "3"
+        }
+      ],
+      "warnings": []
+    },
+    "correct": "#include <bits/stdc++.h>\nusing namespace std;\nint main(){int n;cin>>n;vector<int>a(n);for(auto&x:a)cin>>x;int b=-999;for(int i=0;i<n;i++){int s=0;for(int j=i;j<n;j++){s+=a[j];b=max(b,s);}}cout<<b;}",
+    "wrong": "#include <bits/stdc++.h>\nusing namespace std;\nint main(){int n,x,s=0,b=0;cin>>n;while(n--){cin>>x;s=max(0,s+x);b=max(b,s);}cout<<b;}"
+  },
+  {
+    "id": "knapsack",
+    "problem": {
+      "title": "",
+      "statement": "Input n and W (1<=n<=8,1<=W<=20), followed by n pairs weight,value (1<=weight<=10,1<=value<=20). Each item can be selected at most once. Output maximum total value of a subset with total weight<=W; empty subset allowed. No test-count header.",
+      "samples": [
+        {
+          "stdin": "2 3\n1 2\n2 3",
+          "stdout": "5"
+        }
+      ],
+      "warnings": []
+    },
+    "correct": "#include <bits/stdc++.h>\nusing namespace std;\nint main(){int n,W;cin>>n>>W;vector<int>w(n),v(n);for(int i=0;i<n;i++)cin>>w[i]>>v[i];int b=0;for(int m=0;m<(1<<n);m++){int s=0,t=0;for(int i=0;i<n;i++)if(m>>i&1){s+=w[i];t+=v[i];}if(s<=W)b=max(b,t);}cout<<b;}",
+    "wrong": "#include <bits/stdc++.h>\nusing namespace std;\nint main(){int n,W;cin>>n>>W;vector<pair<int,int>>a(n);for(auto&x:a)cin>>x.first>>x.second;sort(a.begin(),a.end(),[](auto x,auto y){return x.second*y.first>y.second*x.first;});int b=0;for(auto x:a)if(x.first<=W){W-=x.first;b+=x.second;}cout<<b;}"
+  },
+  {
+    "id": "distinct",
+    "problem": {
+      "title": "",
+      "statement": "Input n (1<=n<=8), followed by exactly n integers a[i] (0<=a[i]<=5). Output the number of distinct values in the array. The input array is not guaranteed to be sorted. No test-count header.",
+      "samples": [
+        {
+          "stdin": "3\n1 1 2",
+          "stdout": "2"
+        }
+      ],
+      "warnings": []
+    },
+    "correct": "#include <bits/stdc++.h>\nusing namespace std;\nint main(){int n,x;cin>>n;set<int>s;while(n--){cin>>x;s.insert(x);}cout<<s.size();}",
+    "wrong": "#include <bits/stdc++.h>\nusing namespace std;\nint main(){int n,x,last=-1,b=0;cin>>n;while(n--){cin>>x;if(x!=last)b++;last=x;}cout<<b;}"
+  },
+  {
+    "id": "cyclic-snowmen",
+    "problem": {
+      "title": "",
+      "statement": "Input t test cases (1<=t<=5000). Each case has n (1<=n<=5000) and three arrays a,b,c of length n, with each entry between 1 and 3*n; sum n across cases<=5000. Count ordered triples of cyclic starting positions i,j,k in [0,n-1] such that a[(i+r)%n]<b[(j+r)%n]<c[(k+r)%n] for EVERY r=0..n-1. Output one integer per case. Brute force should enumerate triples on tiny generated n, while still accepting the full sample.",
+      "samples": [
+        {
+          "stdin": "4\n2\n1 2\n3 4\n5 4\n3\n1 1 1\n2 2 2\n3 3 3\n4\n1 2 1 2\n3 3 2 2\n5 5 5 5\n5\n1 4 2 3 5\n6 4 5 7 6\n7 5 8 10 10",
+          "stdout": "4\n27\n0\n10"
+        }
+      ],
+      "warnings": []
+    },
+    "correct": "#include <bits/stdc++.h>\nusing namespace std;\nint main(){int t;cin>>t;while(t--){int n;cin>>n;vector<int>a(n),b(n),c(n);for(int&x:a)cin>>x;for(int&x:b)cin>>x;for(int&x:c)cin>>x;long long x=0,y=0;for(int s=0;s<n;s++){bool p=1,q=1;for(int r=0;r<n;r++){p&=a[r]<b[(r+s)%n];q&=b[r]<c[(r+s)%n];}x+=p;y+=q;}cout<<n*x*y<<\"\\n\";}}",
+    "wrong": "#include <bits/stdc++.h>\nusing namespace std;\nint main(){int t;cin>>t;while(t--){int n;cin>>n;vector<int>a(n),b(n),c(n);for(int&x:a)cin>>x;for(int&x:b)cin>>x;for(int&x:c)cin>>x;long long x=0,y=0;for(int s=0;s<n;s++){bool p=1,q=1;for(int r=0;r<n;r++){p&=a[r]<=b[(r+s)%n];q&=b[r]<=c[(r+s)%n];}x+=p;y+=q;}cout<<n*x*y<<\"\\n\";}}"
+  }
+]

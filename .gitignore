@@ -13,3 +13,5 @@ htmlcov/
 uploads/
 samples/raw/
 .DS_Store
+
+submission/*.mp4

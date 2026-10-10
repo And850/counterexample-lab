@@ -300,3 +300,14 @@ else:
         assert '/sources/main.py' not in processes.stdout
     finally:
         runner.close()
+
+
+def test_expired_lifecycle_deadline_never_starts_container(tmp_path,monkeypatch):
+    import app.runner as module
+    runner=module.Runner(tmp_path,deadline=time.monotonic()-1)
+    calls=[]
+    monkeypatch.setattr(module,'docker',lambda *args,**kwargs:calls.append(args))
+    with pytest.raises(module.RunnerError,match='budget'):
+        runner.prepare('primary',{'main.py':'print(5)'})
+    assert not calls
+    assert runner.close()

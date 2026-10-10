@@ -50,6 +50,9 @@ class RunRequest(Contract):
     def complete_samples(self):
         if not self.problem.samples:
             raise ValueError('At least one complete sample is required')
+        from app.outputs import integer_tokens
+        for sample in self.problem.samples:
+            integer_tokens(sample.stdout)
         return self
 
 
@@ -116,6 +119,7 @@ class Evidence(Contract):
     expected: str
     actual: ExecutionResult
     confirmation: str | None = None
+    references_agree: bool = False
     validators_agree: bool = False
     samples_checked: bool = False
     primary_code: str = ''
@@ -140,8 +144,17 @@ class CounterexampleResult(Contract):
     def confirmed_requires_evidence(self):
         if self.outcome == 'corroborated_counterexample':
             evidence = self.evidence
-            if not evidence or not evidence.validators_agree or not evidence.samples_checked or evidence.confirmation is None:
+            if not evidence or not evidence.references_agree or not evidence.validators_agree or not evidence.samples_checked or evidence.confirmation is None or evidence.actual.status != "ok":
                 raise ValueError('Corroboration requires executed evidence')
+            from app.outputs import integer_tokens
+            if integer_tokens(evidence.expected) != integer_tokens(evidence.confirmation):
+                raise ValueError('References must agree')
+            try:
+                agrees = integer_tokens(evidence.expected) == integer_tokens(evidence.actual.stdout)
+            except ValueError:
+                agrees = False
+            if agrees:
+                raise ValueError('Candidate must disagree')
         return self
 
 
