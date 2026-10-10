@@ -56,12 +56,12 @@ Keep `app/` organized around ingestion, typed contracts, provider, runner, searc
 **Consumes:** HTML bytes or pasted text.
 **Produces:** `import_html(data: bytes) -> ProblemInput`; Pydantic models for the problem, generated bundle, execution result, progress, and final result.
 
-- [ ] Add a minimal synthetic fixture matching the supplied Codeforces structure, including Russian text, raw TeX, list items, nested sample divs, scripts, and unrelated page text. Test the real supplied file locally without copying the full personal webpage into Git.
-- [ ] Write tests asserting all 17 input lines and four output lines survive, the strict inequality and constraints remain intact, and scripts are never executed or rendered.
-- [ ] Cover `<br>` samples, original versus rendered math representations, missing `.problem-statement`, undecodable input, oversized input, and incomplete sample pairs.
-- [ ] Implement extraction, warnings, decoding, size limits, and schema validation. Keep pasted sample inputs explicit and editable.
-- [ ] Define the module/worker interfaces exactly as described in the spec, including bounded case lists and JSON-serializable structured cases.
-- [ ] Run `python -m pytest tests/test_ingestion.py tests/test_contracts.py -q`; review the supplied page's extracted preview; commit the passing importer/contracts.
+- [x] Add a minimal synthetic fixture matching the supplied Codeforces structure, including Russian text, raw TeX, list items, nested sample divs, scripts, and unrelated page text. Test the real supplied file locally without copying the full personal webpage into Git.
+- [x] Write tests asserting all 17 input lines and four output lines survive, the strict inequality and constraints remain intact, and scripts are never executed or rendered.
+- [x] Cover `<br>` samples, original versus rendered math representations, missing `.problem-statement`, undecodable input, oversized input, and incomplete sample pairs.
+- [x] Implement extraction, warnings, decoding, size limits, and schema validation. Keep pasted sample inputs explicit and editable.
+- [x] Define the module/worker interfaces exactly as described in the spec, including bounded case lists and JSON-serializable structured cases.
+- [x] Run `python -m pytest tests/test_ingestion.py tests/test_contracts.py -q`; review the supplied page's extracted preview; commit the passing importer/contracts.
 
 ## Task 3 — Generate and validate a testing bundle (about 2 hours)
 
