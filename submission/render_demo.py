@@ -7,7 +7,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 
 def main():
- result=json.loads(Path('.runs/live-smoke-result.json').read_text())
+ result=json.loads(Path('submission/evidence-example.json').read_text())
  assert result['outcome']=='corroborated_counterexample'
  e=result['evidence'];assert e['references_agree'] and e['validators_agree']
  root=Path('.runs/demo');root.mkdir(parents=True,exist_ok=True)

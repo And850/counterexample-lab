@@ -115,8 +115,8 @@ Keep `app/` organized around ingestion, typed contracts, provider, runner, searc
 
 **Deliverable:** A reproducible public project and an evidence-based hackathon demonstration.
 
-- [ ] Prepare five fixed problems with one reviewed correct and one incorrect C++ solution each. Include the uploaded cyclic-array problem; verify its sample answers through direct enumeration rather than trusting generated prose.
-- [ ] Run all ten solutions through the real workflow with fixed seeds. Record model ID, API errors, tests, elapsed time, outcome, and whether the reduced case agrees with independently reviewed ground truth.
+- [x] Prepare five fixed problems with one reviewed correct and one incorrect C++ solution each. Include the uploaded cyclic-array problem; verify its sample answers through direct enumeration rather than trusting generated prose.
+- [x] Run all ten solutions through the real workflow with fixed seeds. Record model ID, API errors, tests, elapsed time, outcome, and whether the reduced case agrees with independently reviewed ground truth.
 - [ ] Require at least three of five incorrect candidates to produce corroborated cases within 180 seconds and zero false corroborated cases among correct controls. If the gate fails, improve reliability or report the narrower demonstrated coverage; do not hide failures or add features.
 - [ ] Run the regression and browser suites after fixes. Check a fresh setup using the documented image build and local launch commands.
 - [ ] Finish README setup, architecture explanation, supported scope, free API configuration, limitations, benchmark table, and secret-free public source. Push verified commits to And850/counterexample-lab.
@@ -127,4 +127,4 @@ Keep `app/` organized around ingestion, typed contracts, provider, runner, searc
 
 The estimates total about 13 hours of focused work, excluding account/Docker troubleshooting, download time, breaks, and submission delays. Complete the runner/API prerequisites first, then a headless end-to-end search before polishing the interface. If time becomes constrained, simplify visual styling and explanation prose; retain HTML import, input validation, execution isolation, honest outcomes, and a reproducible demo. PDF, Java, hosted execution, and multiple-output checkers remain outside this plan.
 
-No implementation has been performed by writing these documents. Docker operation, API access, timing, and benchmark targets remain unverified until the specified milestones run.
+Implementation and recorded checks are described in docs/superpowers/progress.md. Real browser verification remains blocked; the live benchmark acceptance gate is evaluated separately from deterministic regression checks.

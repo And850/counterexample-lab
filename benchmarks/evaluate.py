@@ -12,6 +12,7 @@ from app.provider import PRIMARY, CONFIRM
 
 
 def truth(id,stdin):
+ if not valid(id,stdin):raise ValueError('Input violates independently reviewed constraints')
  a=list(map(int,stdin.split()))
  if id=='sum':return [sum(a)]
  if id=='distinct':return [len(set(a[1:]))]
@@ -50,27 +51,35 @@ def valid(id, stdin):
  except (ValueError,IndexError,TypeError):return False
 
 
+def provenance():
+ provider=os.getenv("MODEL_PROVIDER","lmstudio")
+ return {"provider":provider,"model":os.getenv("GEMINI_MODEL","gemini-3.8-flash") if provider=="gemini" else os.getenv("LMSTUDIO_MODEL","counterexample-local"),"api":"google-genai" if provider=="gemini" else os.getenv("LMSTUDIO_API","native")}
+
+
 def main():
- parser=argparse.ArgumentParser();parser.add_argument('--attempt',type=int,default=1);args=parser.parse_args()
+ parser=argparse.ArgumentParser();parser.add_argument('--attempt',type=int);args=parser.parse_args()
  load_dotenv();root=Path('.runs/evaluation');root.mkdir(parents=True,exist_ok=True)
  path=Path('benchmarks/results.json')
  records=json.loads(path.read_text()) if path.exists() else []
+ existing={r.get('attempt',1) for r in records}
+ if args.attempt is None:args.attempt=max(existing,default=0)+1
+ if args.attempt in existing:parser.error('Attempt identifier already exists; select a new round.')
  version=hashlib.sha256((PRIMARY+CONFIRM).encode()).hexdigest()
  for case in json.loads(Path('benchmarks/cases.json').read_text()):
   for kind in ('wrong','correct'):
    print(case['id'],kind,'attempt',args.attempt,flush=True)
    result=search(ProblemInput.model_validate(case['problem']),case[kind],seed=850,deadline=time.monotonic()+180,root=root,on_progress=lambda stage,counts,elapsed:print(round(elapsed,1),stage,flush=True))
    (root/(case['id']+'-'+kind+'-attempt'+str(args.attempt)+'.json')).write_text(result.model_dump_json(indent=2))
-   verified=False;input_valid=False;actual_disagrees=None
+   verified=False;input_valid=False;actual_disagrees=None;checked=False
    if result.evidence:
     input_valid=valid(case['id'],result.evidence.stdin)
     try:
-     expected=truth(case['id'],result.evidence.stdin)
+     expected=truth(case['id'],result.evidence.stdin);checked=True
      verified=list(map(int,result.evidence.expected.split()))==expected
      try:actual_disagrees=list(map(int,result.evidence.actual.stdout.split()))!=expected
      except ValueError:actual_disagrees=True
     except (ValueError,IndexError,TypeError):pass
-   record={'problem':case['id'],'candidate':kind,'attempt':args.attempt,'prompt_version':version,'provider':os.getenv('MODEL_PROVIDER','lmstudio'),'model':os.getenv('LMSTUDIO_MODEL','counterexample-local'),'outcome':result.outcome,'elapsed':round(result.elapsed,2),'counts':result.counts.model_dump(),'ground_truth_checked':result.evidence is not None,'ground_truth_agrees':verified,'input_valid':input_valid,'actual_disagrees':actual_disagrees,'message':result.message}
+   record={'problem':case['id'],'candidate':kind,'attempt':args.attempt,'prompt_version':version,**provenance(),'outcome':result.outcome,'elapsed':round(result.elapsed,2),'counts':result.counts.model_dump(),'ground_truth_checked':checked,'ground_truth_agrees':verified,'input_valid':input_valid,'actual_disagrees':actual_disagrees,'message':result.message}
    records.append(record);temporary=path.with_suffix('.tmp');temporary.write_text(json.dumps(records,indent=2));temporary.replace(path);print(record,flush=True)
  return records
 

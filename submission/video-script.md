@@ -16,7 +16,7 @@ This is an evidence walkthrough from a real local model run. The generated video
 
 **1:00–1:20 — Executed evidence**
 
-“This real run found input zero and negative one hundred. The expected answer is negative one hundred; the submitted program prints positive one hundred. A fresh independent reference sees only the statement and samples. Both references and both input validators agreed. The full run took about fifty-six seconds.”
+“This recorded benchmark run found input zero and negative one hundred. The expected answer is negative one hundred; the submitted program prints positive one hundred. A fresh independent reference sees only the statement and samples. Both references and both input validators agreed. The full run took about eighty-five seconds.”
 
 **1:20–1:40 — Inspectability**
 

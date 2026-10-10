@@ -22,6 +22,7 @@ MODEL_PROVIDER=lmstudio
 LMSTUDIO_BASE_URL=http://127.0.0.1:1234/v1
 LMSTUDIO_MODEL=counterexample-local
 LMSTUDIO_API=native
+LMSTUDIO_REASONING=off
 ```
 
 In LM Studio, download/load `qwen/qwen3.5-9b`, or load an already downloaded model with its CLI:
@@ -29,12 +30,12 @@ In LM Studio, download/load `qwen/qwen3.5-9b`, or load an already downloaded mod
 ```sh
 lms load qwen/qwen3.5-9b --context-length 8192 --identifier counterexample-local -y
 lms server start --port 1234 --bind 127.0.0.1
-.venv/bin/python -m uvicorn app.main:app --host 127.0.0.1 --port 8001 --env-file .env
+.venv/bin/python -m uvicorn app.main:app --host 127.0.0.1 --port 8002 --env-file .env
 ```
 
-Open [Counterexample Lab](http://127.0.0.1:8001). Port 8001 avoids another service already running on the development machine; any free local port works. Bind to loopback only. The app preserves editable inputs when a run fails.
+Open [Counterexample Lab](http://127.0.0.1:8002). Port 8002 avoids existing development servers; any free local port works. Bind to loopback only. The app preserves editable inputs when a run fails.
 
-The [native LM Studio API](https://lmstudio.ai/docs/developer/rest/chat) supports reasoning disabled. The module schema is supplied in the prompt and enforced locally by Pydantic; native generation is not decoder-constrained. `LMSTUDIO_API=openai` retains the schema-constrained compatibility endpoint, whose Qwen reasoning routing produced incomplete modules during testing. Optional `MODEL_PROVIDER=gemini` uses Google GenAI JSON-schema responses, but live Gemini generation has **not** passed on this machine. The app never changes provider or activates billing automatically.
+The [native LM Studio API](https://lmstudio.ai/docs/developer/rest/chat) supports reasoning disabled for Qwen3.5. Set `LMSTUDIO_REASONING=unsupported` only for a model that has no reasoning configuration. The model returns bounded arrays of physical source lines, which are joined into text and checked against the original bundle contract before container execution. The module schema is supplied in the prompt and enforced locally by Pydantic; native generation is not decoder-constrained. A complete JSON-only code fence is accepted before schema validation. `LMSTUDIO_API=openai` retains the schema-constrained compatibility endpoint, whose Qwen reasoning routing produced incomplete modules during testing. Optional `MODEL_PROVIDER=gemini` uses Google GenAI JSON-schema responses, but live Gemini generation has **not** passed on this machine. The app never changes provider or activates billing automatically.
 
 ## Workflow and evidence
 
@@ -81,4 +82,4 @@ See [implementation progress](docs/superpowers/progress.md), [design](docs/super
 
 ## Submission artifacts
 
-[Devpost draft](submission/devpost-description.md) and [two-minute narration](submission/video-script.md) are prepared. The local `submission/evidence-walkthrough.mp4` is a silent 120-second slide walkthrough of the corroborated live run, not a browser recording. To render it from `.runs/live-smoke-result.json`, install `submission/requirements.txt` and run `python -m submission.render_demo`; it requires FFmpeg and the macOS Arial font used on the development machine. The video is excluded from Git. No Devpost submission has been made automatically.
+[Devpost draft](submission/devpost-description.md) and [two-minute narration](submission/video-script.md) are prepared. The local `submission/evidence-walkthrough.mp4` is a silent 120-second slide walkthrough of the preserved 85.3-second [benchmark evidence](submission/evidence-example.json), not a browser recording. To render it from that public JSON file, install `submission/requirements.txt` and run `python -m submission.render_demo`; it requires FFmpeg and the macOS Arial font used on the development machine. The video is excluded from Git. No Devpost submission has been made automatically.

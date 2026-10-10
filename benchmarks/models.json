@@ -1,0 +1,61 @@
+{
+  "attempts_1_and_2": {
+    "provider": "lmstudio",
+    "api": "native",
+    "model_key": "qwen/qwen3.5-9b",
+    "model_alias": "counterexample-local",
+    "format": "MLX safetensors",
+    "quantization": "4bit",
+    "context_length": 8192,
+    "reasoning": "off",
+    "machine": "Apple M1 Pro, 16 GB RAM",
+    "temperature": 0.1,
+    "max_output_tokens": 1100,
+    "response_code_representation": "single JSON string"
+  },
+  "attempt_3": {
+    "provider": "lmstudio",
+    "api": "openai",
+    "model_key": "qwen/qwen2.5-vl-7b",
+    "model_alias": "counterexample-vl7b",
+    "format": "GGUF",
+    "quantization": "Q4_K_M",
+    "context_length": 8192,
+    "parallel_predictions": 1,
+    "reported_loaded_memory": "5.62 GiB",
+    "machine": "Apple M1 Pro, 16 GB RAM",
+    "temperature": 0.2,
+    "max_output_tokens": 2048,
+    "response_code_representation": "single JSON string"
+  },
+  "attempt_4": {
+    "provider": "lmstudio",
+    "api": "native",
+    "model_key": "qwen/qwen3.5-9b",
+    "model_alias": "counterexample-local",
+    "format": "MLX safetensors",
+    "quantization": "4bit",
+    "context_length": 8192,
+    "reasoning": "off",
+    "machine": "Apple M1 Pro, 16 GB RAM",
+    "notes": "Clarified input rendering versus answer output. Complete JSON-only fences accepted. OpenAI compatibility requests use separate system/user roles; this round uses native API. Round interrupted during fourth run to tighten host ground-truth bounds before enumeration; retained all completed records and the interrupted attempt with elapsed lower bound.",
+    "temperature": 0.1,
+    "max_output_tokens": 1100,
+    "response_code_representation": "single JSON string"
+  },
+  "attempt_5": {
+    "provider": "lmstudio",
+    "api": "native",
+    "model_key": "qwen/qwen3.5-9b",
+    "model_alias": "counterexample-local",
+    "format": "MLX safetensors",
+    "quantization": "4bit",
+    "context_length": 8192,
+    "reasoning": "off",
+    "machine": "Apple M1 Pro, 16 GB RAM",
+    "temperature": 0.1,
+    "max_output_tokens": 1100,
+    "notes": "Clarified input rendering; complete JSON-only fences accepted; independent original constraints validated before host ground-truth enumeration.",
+    "response_code_representation": "single JSON string"
+  }
+}

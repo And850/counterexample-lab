@@ -1,0 +1,36 @@
+{
+  "outcome": "corroborated_counterexample",
+  "message": "Both sample-checked references and validators agree on this executed failing input. Reduced locally; global minimality is not claimed.",
+  "evidence": {
+    "stdin": "0 -100",
+    "expected": "-100",
+    "actual": {
+      "status": "ok",
+      "stdout": "100",
+      "stderr": "",
+      "exit_code": 0,
+      "elapsed": 0.0037937499998861313
+    },
+    "confirmation": "-100",
+    "references_agree": true,
+    "validators_agree": true,
+    "samples_checked": true,
+    "primary_code": "import sys, json\n\ndef parse(s):\n    t = s.split()\n    if len(t) != 2:\n        return None\n    a, b = int(t[0]), int(t[1])\n    return {'a': a, 'b': b}\n\ndef render(c):\n    return f\"{c['a']} {c['b']}\"\n\ndef valid(c):\n    return -100 <= c['a'] <= 100 and -100 <= c['b'] <= 100\n\ndef solve(s):\n    c = parse(s)\n    if c is None:\n        return 'INVALID'\n    return str(c['a'] + c['b'])\n\ndef generate(seed, index, mode):\n    if mode == 'random':\n        import random\n        r = random.Random(seed + index)\n        a = r.randint(-100, 100)\n        b = r.randint(-100, 100)\n        return {'a': a, 'b': b}\n    elif mode == 'adversarial':\n        cases = []\n        for val in [-100, 100, 0]:\n            cases.append({'a': val, 'b': val})\n        cases.append({'a': 100, 'b': -100})\n        return cases[index % len(cases)]\n    elif mode == 'exhaustive':\n        cases = []\n        for a in range(-100, 101):\n            for b in range(-100, 101):\n                cases.append({'a': a, 'b': b})\n        return cases[index % len(cases)]\n    return None\n\ndef shrink(c):\n    cases = []\n    if c['a'] != 0:\n        cases.append({'a': 0, 'b': c['b']})\n    if c['b'] != 0:\n        cases.append({'a': c['a'], 'b': 0})\n    if c['a'] != -100:\n        cases.append({'a': c['a'] // 2, 'b': c['b']})\n    if c['b'] != -100:\n        cases.append({'a': c['a'], 'b': c['b'] // 2})\n    return cases[:16]",
+    "confirmation_code": "def valid_input(stdin):\n    try:\n        tokens = stdin.split()\n        if len(tokens) != 2:\n            return False\n        a, b = int(tokens[0]), int(tokens[1])\n        return -100 <= a <= 100 and -100 <= b <= 100\n    except:\n        return False\n\ndef solve(stdin):\n    try:\n        tokens = stdin.split()\n        if len(tokens) != 2:\n            return \"\"\n        a, b = int(tokens[0]), int(tokens[1])\n        return str(a + b)\n    except:\n        return \"\"\n",
+    "candidate_hash": "0213b7e9529f39e4f6a294263b8f5daea9827363eec89bad1541058fb490fb19",
+    "primary_hash": "dc428c236cf3c8d41d2dee32e9086104da7079c7091ebc58da1df45dd7890564",
+    "confirmation_hash": "e13de105a4f369037923822f19e4b7d03340c28d990989ce7d87e0cf38d1f625"
+  },
+  "seed": 850,
+  "counts": {
+    "generated": 1,
+    "valid": 2,
+    "tested": 2,
+    "invalid": 0,
+    "timed_out": 0
+  },
+  "elapsed": 85.33137337502558,
+  "method": "Parse two integers, validate bounds, output sum.",
+  "explanation": "The input '0 -100' results in a sum of -100. The expected output is -100, but the actual output is 100 because the code uses std::abs, which returns the absolute value of the sum, discarding the negative sign.",
+  "explanation_ai_generated": true
+}

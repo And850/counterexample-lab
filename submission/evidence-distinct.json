@@ -1,0 +1,36 @@
+{
+  "outcome": "corroborated_counterexample",
+  "message": "Both sample-checked references and validators agree on this executed failing input. Reduced locally; global minimality is not claimed.",
+  "evidence": {
+    "stdin": "5 \n3 0 4 5 3",
+    "expected": "4",
+    "actual": {
+      "status": "ok",
+      "stdout": "5",
+      "stderr": "",
+      "exit_code": 0,
+      "elapsed": 0.0033453749997534032
+    },
+    "confirmation": "4",
+    "references_agree": true,
+    "validators_agree": true,
+    "samples_checked": true,
+    "primary_code": "def parse(s):\n    t=list(map(int,s.split()))\n    n=t[0]\n    if n!=len(t)-1:\n        return None\n    if n<1 or n>8:\n        return None\n    for x in t[1:]:\n        if x<0 or x>5:\n            return None\n    return {'n':n,'a':t[1:]}\n\ndef render(c):\n    return str(c['n'])+' '+chr(10)+' '.join(map(str,c['a']))\n\ndef valid(c):\n    if c is None:\n        return False\n    n=c['n']\n    if n<1 or n>8:\n        return False\n    for x in c['a']:\n        if x<0 or x>5:\n            return False\n    return True\n\ndef solve(s):\n    c=parse(s)\n    if c is None:\n        return '0'\n    return str(len(set(c['a'])))\n\ndef generate(seed,index,mode):\n    if mode=='random':\n        import random\n        rng=random.Random(seed+index)\n        n=rng.randint(1,8)\n        a=[]\n        for _ in range(n):\n            a.append(rng.randint(0,5))\n        return {'n':n,'a':a}\n    elif mode=='adversarial':\n        cases=[]\n        for n in range(1,9):\n            for base in range(6):\n                a=[base]*n\n                cases.append({'n':n,'a':a})\n        return cases[index%len(cases)]\n    else:\n        cases=[]\n        for n in range(1,9):\n            for base in range(6):\n                a=[base]*n\n                cases.append({'n':n,'a':a})\n        return cases[index%len(cases)]\n\ndef shrink(c):\n    cases=[]\n    n=c['n']\n    a=c['a']\n    if n>1:\n        cases.append({'n':n-1,'a':a[:-1]})\n        cases.append({'n':n-1,'a':a[:n-1]})\n    if len(a)>1:\n        cases.append({'n':n,'a':a[:-1]})\n        cases.append({'n':n,'a':a[:len(a)-1]})\n    if n>1 and len(a)>1:\n        cases.append({'n':n-1,'a':a[:-1]})\n    return cases[:16]\n",
+    "confirmation_code": "def valid_input(stdin):\n    try:\n        tokens = stdin.split()\n        if len(tokens) < 1:\n            return False\n        n = int(tokens[0])\n        if not (1 <= n <= 8):\n            return False\n        if len(tokens) != n + 1:\n            return False\n        a = []\n        for i in range(1, n + 1):\n            val = int(tokens[i])\n            if not (0 <= val <= 5):\n                return False\n            a.append(val)\n        return True\n    except:\n        return False\n\ndef solve(stdin):\n    tokens = stdin.split()\n    if not valid_input(stdin):\n        return \"0\"\n    n = int(tokens[0])\n    a = []\n    for i in range(1, n + 1):\n        a.append(int(tokens[i]))\n    return str(len(set(a)))",
+    "candidate_hash": "af6d3cf6110139c4e86ec21ccae96e283bcd39c7f22a2cf0b1ec57ab691b7935",
+    "primary_hash": "4183d9c2c20dc9e940a9fa6789e1660baec08640c11127f7c32b81b7228163d7",
+    "confirmation_hash": "c4d53cab7dbecc8811fa05428594b908113d203d7e4084cf5bf4594f5e0a3c6a"
+  },
+  "seed": 850,
+  "counts": {
+    "generated": 25,
+    "valid": 26,
+    "tested": 26,
+    "invalid": 0,
+    "timed_out": 0
+  },
+  "elapsed": 112.32631812500767,
+  "method": "Parse input to extract n and array a. Validate constraints n in 1-8 and a[i] in 0-5. Count distinct values using set. Generate cases by iterating all valid combinations or random sampling. Shrink by reducing n or removing elements.",
+  "explanation": "",
+  "explanation_ai_generated": false
+}

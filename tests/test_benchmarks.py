@@ -19,3 +19,22 @@ def test_independent_validators_cover_dimensions_and_aggregate_constraints():
  assert not valid('sum','0 1000')
  assert not valid('cyclic-snowmen','2 1 1 2 3')
  assert not valid('cyclic-snowmen','1 1 1 2 4')
+
+
+def test_evaluation_provenance_uses_selected_provider(monkeypatch):
+ from benchmarks.evaluate import provenance
+ monkeypatch.setenv('MODEL_PROVIDER','gemini')
+ monkeypatch.setenv('GEMINI_MODEL','reviewed-gemini-model')
+ monkeypatch.setenv('LMSTUDIO_MODEL','unrelated-local-model')
+ assert provenance()=={'provider':'gemini','model':'reviewed-gemini-model','api':'google-genai'}
+ monkeypatch.setenv('MODEL_PROVIDER','lmstudio')
+ monkeypatch.setenv('LMSTUDIO_API','native')
+ assert provenance()=={'provider':'lmstudio','model':'unrelated-local-model','api':'native'}
+
+
+def test_ground_truth_rejects_out_of_scope_dimensions_before_enumeration():
+ import pytest
+ with pytest.raises(ValueError,match='constraints'):
+  truth('knapsack','9 1 '+'1 1 '*9)
+ with pytest.raises(ValueError,match='constraints'):
+  truth('nonempty-interval','9 '+'1 '*9)
