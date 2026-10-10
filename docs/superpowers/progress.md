@@ -36,6 +36,8 @@ Benchmark ground-truth definitions validate original dimensions, ranges and aggr
 
 The published archive at `3d4944317ca21c62ccef6993e419ade6a22f48eb` was checked in a separate environment: pinned dependency installation, runner image build, server import, C++ compilation/execution yielding `42` only inside Docker, and successful cleanup. The later `e39e678493ca55d397a65d3cae710755f1411afa` archive also passed source-line decoding and container compilation. Both were checked to contain no `.env`.
 
+Final release `9a7691d3d83dd82607790fd450a60d1c120cb56c` published 73 verified files. Its downloaded archive contains no `.env`, includes all ten Gemini results and retains the same pinned requirements. Using the separate installed environment, its interface/health routes, physical source-line contract, Docker-only C++ execution yielding `42`, and cleanup passed. A final container audit was empty; the current app still serves HTTP 200 on port 8002. No generation retry was made after the observed quota failure.
+
 The walkthrough renders from public `submission/evidence-example.json`; its duration is 120 seconds and the evidence slide was visually inspected. It is labeled recorded evidence, not a browser screen recording. The video is local and excluded from Git; its renderer and narration are public.
 
 Heartbeat scheduling was rejected by the app's automatic approval policy (`never`), so no recurring automation was created. Work continued in the active session. A prior development server could not be terminated under the sandbox policy; it was left intact and the app uses a separate free port. Later servers created by this session were restarted through their owned terminal sessions.
