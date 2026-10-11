@@ -41,3 +41,13 @@ Final release `9a7691d3d83dd82607790fd450a60d1c120cb56c` published 73 verified f
 The walkthrough renders from public `submission/evidence-example.json`; its duration is 120 seconds and the evidence slide was visually inspected. It is labeled recorded evidence, not a browser screen recording. The video is local and excluded from Git; its renderer and narration are public.
 
 Heartbeat scheduling was rejected by the app's automatic approval policy (`never`), so no recurring automation was created. Work continued in the active session. A prior development server could not be terminated under the sandbox policy; it was left intact and the app uses a separate free port. Later servers created by this session were restarted through their owned terminal sessions.
+
+## October 11 final demo preparation
+
+After the user granted broader filesystem access and authorized another check, a single fresh Gemini end-to-end smoke succeeded in **69.132 seconds**: input `0 -1`, expected `-1`, actual `1`, with both references and validators agreeing. Its reference hashes and serialized evidence were checked and preserved in `submission/evidence-day2-gemini.json`. No role containers remained. This verifies that generation was available for that request; it does not establish future quota availability.
+
+Browser permissions did not change with filesystem permissions. The browser tool explicitly rejected both localhost and Devpost because permission had been declined. No alternate browser, raw browser command or indirect submission workaround was attempted. Real-browser verification and Devpost entry remain blocked.
+
+The user chose synthesized narration. `submission/narrated-evidence-walkthrough.mp4` is **134.521 seconds**, 1280×720 H.264 with AAC audio, approximately 2.4 MB. Its six slides show the fresh recorded evidence, supported workflow, an actual `app/search.py` excerpt and full benchmark limitations. All six rendered frames were visually inspected; layout bounds, duration and non-silent audio were verified. Narration uses the built-in macOS Samantha voice and is labeled synthesized throughout. The transcript and renderer are public; the MP4 stays local. Offline DOM journeys passed again. No core application behavior changed.
+
+`submission/submission-checklist.md` provides exact project fields, public source/setup links, the local video path, supported video-host requirements and the stricter **20:59 Madrid** deadline. No video-host upload or Devpost submission has been made.

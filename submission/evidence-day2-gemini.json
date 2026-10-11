@@ -1,0 +1,36 @@
+{
+  "outcome": "corroborated_counterexample",
+  "message": "Both sample-checked references and validators agree on this executed failing input. Reduced locally; global minimality is not claimed.",
+  "evidence": {
+    "stdin": "0 -1",
+    "expected": "-1",
+    "actual": {
+      "status": "ok",
+      "stdout": "1",
+      "stderr": "",
+      "exit_code": 0,
+      "elapsed": 0.002540291000002526
+    },
+    "confirmation": "-1",
+    "references_agree": true,
+    "validators_agree": true,
+    "samples_checked": true,
+    "primary_code": "import random\ndef parse(stdin):\n    toks = stdin.split()\n    if len(toks) != 2: raise ValueError()\n    return [int(toks[0]), int(toks[1])]\ndef render(case):\n    return f\"{case[0]} {case[1]}\"\ndef valid(case):\n    return (isinstance(case, list) and len(case) == 2 and\n            all(isinstance(x, int) and not isinstance(x, bool) and -100 <= x <= 100 for x in case))\ndef solve(stdin):\n    a, b = parse(stdin)\n    return str(a + b)\ndef generate(seed, index, mode):\n    if mode == 'exhaustive':\n        if index >= 121: return None\n        return [index // 11 - 5, index % 11 - 5]\n    if mode == 'random':\n        rng = random.Random(seed + index)\n        return [rng.randint(-100, 100), rng.randint(-100, 100)]\n    b = [-100, 0, 100]\n    return [[x, y] for x in b for y in b][index % 9]\ndef shrink(case):\n    a, b = case\n    cand = [[0, b], [a, 0], [int(a / 2), b], [a, int(b / 2)], [int(a / 2), int(b / 2)]]\n    out = []\n    for c in cand:\n        if c != case and valid(c) and c not in out:\n            out.append(c)\n    return out[:16]",
+    "confirmation_code": "def valid_input(stdin):\n    try:\n        parts = stdin.split()\n        if len(parts) != 2:\n            return False\n        a, b = map(int, parts)\n        return -100 <= a <= 100 and -100 <= b <= 100\n    except Exception:\n        return False\n\ndef solve(stdin):\n    a, b = map(int, stdin.split())\n    return str(a + b)",
+    "candidate_hash": "d9942c5ba5e10d110842c425c0223ffb914a104cc4ee979f83108b8fe0817f88",
+    "primary_hash": "91b1a38c81e50360c0b1e18d35a222b87b5112869b48fc6e446885284eb9770e",
+    "confirmation_hash": "940966cbda2191b0be55d30551e65ae3abca7de4f454bce07b90b854f93c6167"
+  },
+  "seed": 850,
+  "counts": {
+    "generated": 1,
+    "valid": 2,
+    "tested": 2,
+    "invalid": 0,
+    "timed_out": 0
+  },
+  "elapsed": 69.13226745906286,
+  "method": "Direct addition of two integers.",
+  "explanation": "",
+  "explanation_ai_generated": false
+}

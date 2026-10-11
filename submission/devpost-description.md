@@ -26,7 +26,7 @@ Native LM Studio generation with reasoning disabled worked better than the schem
 
 ## Accomplishments
 
-A live Gemini run found and corroborated an absolute-sum bug: input `0 -1`, expected `-1`, actual `1`, in 28.7 seconds. A preserved local-model benchmark found `0 -100`, expected `-100`, actual `100`, in 85.3 seconds and supplies the evidence walkthrough video. Deterministic regression tests exercise wrong references, correct controls, invalid proposals, coupled arrays, cancellation and container containment. All five fixed benchmark problems and both controls per problem are reported in the repository, including unsuccessful attempts.
+A live Gemini run found and corroborated an absolute-sum bug: input `0 -1`, expected `-1`, actual `1`, in 28.7 seconds. A fresh October 11 run reproduced the retained input and outputs in 69.1 seconds; its preserved evidence supplies the final narrated walkthrough, alongside an actual source-code excerpt. A local-model benchmark also found `0 -100`, expected `-100`, actual `100`, in 85.3 seconds. Deterministic regression tests exercise wrong references, correct controls, invalid proposals, coupled arrays, cancellation and container containment. All five fixed benchmark problems and both controls per problem are reported in the repository, including unsuccessful attempts.
 
 The complete Gemini round corroborated 3/5 wrong controls with zero false corroborated correct-control findings. Three correct controls completed inconclusively; two failed at the provider stage. The repository retains 64 runs across seven rounds and full results for all ten Gemini controls. All 103 regression tests and offline interface journeys pass.
 
@@ -37,6 +37,8 @@ No disagreement within the budget is inconclusive. Two AI references can share a
 The distinct-counting Gemini result stayed unconfirmed because its second reference did not finish. Cyclic-array generation failed on truncation and quota limits. Free API quotas constrain repeated runs; the app reports these failures and does not activate billing or change provider automatically.
 
 Real browser/visual verification was blocked by this development session's browser permission policy. Offline DOM interaction checks and API tests are available; this limitation is disclosed rather than hidden.
+
+The final video is a recorded evidence-and-source walkthrough with clearly labeled synthesized narration. It is not an interface screen recording.
 
 ## Access
 
